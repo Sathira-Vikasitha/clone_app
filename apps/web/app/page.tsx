@@ -50,6 +50,8 @@ export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [caption, setCaption] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [commentText, setCommentText] = useState<Record<string, string>>({});
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [editCaption, setEditCaption] = useState("");
@@ -136,7 +138,46 @@ export default function HomePage() {
 
     setCaption("");
     setImageUrl("");
+    setSelectedImage(null);
     setPosts((currentPosts) => [data, ...currentPosts]);
+  }
+
+  async function uploadSelectedImage() {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    if (!selectedImage) {
+      setError("Choose an image first");
+      return;
+    }
+
+    setError("");
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", selectedImage);
+
+    const response = await apiFetch("/uploads/image", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    setIsUploading(false);
+
+    if (!response.ok) {
+      setError(data.message || "Image upload failed");
+      return;
+    }
+
+    setImageUrl(data.imageUrl);
   }
 
   async function toggleLike(postId: string) {
@@ -339,6 +380,31 @@ export default function HomePage() {
             value={imageUrl}
             onChange={(event) => setImageUrl(event.target.value)}
           />
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <input
+              className="min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-4 py-3 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
+              type="file"
+              accept="image/*"
+              onChange={(event) =>
+                setSelectedImage(event.target.files?.[0] || null)
+              }
+            />
+            <button
+              type="button"
+              onClick={uploadSelectedImage}
+              className="rounded-md border border-teal-300/60 px-4 py-2 text-sm font-semibold text-teal-200"
+              disabled={isUploading}
+            >
+              {isUploading ? "Uploading..." : "Upload image"}
+            </button>
+          </div>
+          {imageUrl ? (
+            <img
+              className="mt-4 max-h-80 w-full rounded-md object-cover"
+              src={imageUrl}
+              alt=""
+            />
+          ) : null}
           {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
           <button className="mt-4 h-12 rounded-md bg-teal-300 px-5 font-semibold text-neutral-950">
             Share post
