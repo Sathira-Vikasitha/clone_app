@@ -78,6 +78,35 @@ export async function deletePostForOwner(postId: string, authorId: string) {
   return result.count > 0;
 }
 
+export async function updatePostForOwner(data: {
+  postId: string;
+  authorId: string;
+  caption: string;
+  imageUrl?: string | null;
+}) {
+  const existingPost = await prisma.post.findFirst({
+    where: {
+      id: data.postId,
+      authorId: data.authorId,
+    },
+  });
+
+  if (!existingPost) {
+    return null;
+  }
+
+  return prisma.post.update({
+    where: {
+      id: data.postId,
+    },
+    data: {
+      caption: data.caption,
+      imageUrl: data.imageUrl || null,
+    },
+    include: postInclude(data.authorId),
+  });
+}
+
 function postInclude(currentUserId: string) {
   return {
     author: {

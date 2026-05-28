@@ -51,6 +51,9 @@ export default function HomePage() {
   const [caption, setCaption] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [commentText, setCommentText] = useState<Record<string, string>>({});
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [editCaption, setEditCaption] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -244,6 +247,50 @@ export default function HomePage() {
     }
   }
 
+  function startEditing(post: Post) {
+    setEditingPostId(post.id);
+    setEditCaption(post.caption);
+    setEditImageUrl(post.imageUrl || "");
+  }
+
+  function cancelEditing() {
+    setEditingPostId(null);
+    setEditCaption("");
+    setEditImageUrl("");
+  }
+
+  async function savePostEdit(postId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const response = await apiFetch(`/posts/${postId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        caption: editCaption,
+        imageUrl: editImageUrl,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.message || "Could not update post");
+      return;
+    }
+
+    setPosts((currentPosts) =>
+      currentPosts.map((post) => (post.id === postId ? data : post)),
+    );
+    cancelEditing();
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
@@ -314,27 +361,67 @@ export default function HomePage() {
                     {new Date(post.createdAt).toLocaleDateString()}
                   </p>
                   {user?.id === post.author.id ? (
-                    <button
-                      onClick={() => deletePost(post.id)}
-                      className="rounded-md border border-red-300/40 px-3 py-1 text-xs font-medium text-red-200 hover:bg-red-300/10"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => startEditing(post)}
+                        className="rounded-md border border-white/15 px-3 py-1 text-xs font-medium text-white/75 hover:bg-white/10"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deletePost(post.id)}
+                        className="rounded-md border border-red-300/40 px-3 py-1 text-xs font-medium text-red-200 hover:bg-red-300/10"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   ) : null}
                 </div>
               </div>
 
-              <p className="mt-4 whitespace-pre-wrap text-white/90">
-                {post.caption}
-              </p>
+              {editingPostId === post.id ? (
+                <div className="mt-4 flex flex-col gap-3">
+                  <textarea
+                    className="min-h-24 w-full resize-none rounded-md border border-white/15 bg-neutral-900 px-4 py-3 outline-none focus:border-teal-300"
+                    value={editCaption}
+                    onChange={(event) => setEditCaption(event.target.value)}
+                  />
+                  <input
+                    className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                    placeholder="Optional image URL"
+                    value={editImageUrl}
+                    onChange={(event) => setEditImageUrl(event.target.value)}
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => savePostEdit(post.id)}
+                      className="rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={cancelEditing}
+                      className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/75"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <p className="mt-4 whitespace-pre-wrap text-white/90">
+                    {post.caption}
+                  </p>
 
-              {post.imageUrl ? (
-                <img
-                  className="mt-4 max-h-[520px] w-full rounded-md object-cover"
-                  src={post.imageUrl}
-                  alt=""
-                />
-              ) : null}
+                  {post.imageUrl ? (
+                    <img
+                      className="mt-4 max-h-[520px] w-full rounded-md object-cover"
+                      src={post.imageUrl}
+                      alt=""
+                    />
+                  ) : null}
+                </>
+              )}
 
               <div className="mt-4 flex items-center gap-3 text-sm">
                 <button

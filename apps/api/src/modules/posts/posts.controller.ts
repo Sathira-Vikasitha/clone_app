@@ -6,12 +6,15 @@ import {
   deletePostForOwner,
   getFeed,
   togglePostLike,
+  updatePostForOwner,
 } from "./posts.service.js";
 
 const createPostSchema = z.object({
   caption: z.string().min(1).max(500),
   imageUrl: z.string().url().optional().or(z.literal("")),
 });
+
+const updatePostSchema = createPostSchema;
 
 const commentSchema = z.object({
   body: z.string().min(1).max(300),
@@ -106,6 +109,33 @@ export async function remove(req: Request, res: Response) {
     return res.json({ deleted: true });
   } catch (error: any) {
     return res.status(400).json({ message: error.message || "Delete post failed" });
+  }
+}
+
+export async function update(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const postId = req.params.postId;
+    const body = updatePostSchema.parse(req.body);
+
+    if (!postId || Array.isArray(postId)) {
+      return res.status(400).json({ message: "Post id is required" });
+    }
+
+    const updatedPost = await updatePostForOwner({
+      postId,
+      authorId: userId,
+      caption: body.caption,
+      imageUrl: body.imageUrl || null,
+    });
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    return res.json(mapPost(updatedPost, userId));
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Update post failed" });
   }
 }
 
