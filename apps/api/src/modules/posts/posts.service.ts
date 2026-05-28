@@ -67,6 +67,17 @@ export async function addPostComment(data: {
   });
 }
 
+export async function deletePostForOwner(postId: string, authorId: string) {
+  const result = await prisma.post.deleteMany({
+    where: {
+      id: postId,
+      authorId,
+    },
+  });
+
+  return result.count > 0;
+}
+
 function postInclude(currentUserId: string) {
   return {
     author: {

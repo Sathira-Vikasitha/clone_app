@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   addPostComment,
   createPost,
+  deletePostForOwner,
   getFeed,
   togglePostLike,
 } from "./posts.service.js";
@@ -84,6 +85,27 @@ export async function comment(req: Request, res: Response) {
     return res.status(201).json(createdComment);
   } catch (error: any) {
     return res.status(400).json({ message: error.message || "Comment failed" });
+  }
+}
+
+export async function remove(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const postId = req.params.postId;
+
+    if (!postId || Array.isArray(postId)) {
+      return res.status(400).json({ message: "Post id is required" });
+    }
+
+    const deleted = await deletePostForOwner(postId, userId);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    return res.json({ deleted: true });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Delete post failed" });
   }
 }
 

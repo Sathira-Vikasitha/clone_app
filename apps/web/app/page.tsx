@@ -216,6 +216,34 @@ export default function HomePage() {
     );
   }
 
+  async function deletePost(postId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const confirmed = window.confirm("Delete this post?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    const response = await apiFetch(`/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      setPosts((currentPosts) =>
+        currentPosts.filter((post) => post.id !== postId),
+      );
+    }
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
@@ -281,9 +309,19 @@ export default function HomePage() {
                   <p className="font-semibold">{post.author.name}</p>
                   <p className="text-sm text-white/55">@{post.author.username}</p>
                 </div>
-                <p className="text-xs text-white/45">
-                  {new Date(post.createdAt).toLocaleDateString()}
-                </p>
+                <div className="flex items-center gap-3">
+                  <p className="text-xs text-white/45">
+                    {new Date(post.createdAt).toLocaleDateString()}
+                  </p>
+                  {user?.id === post.author.id ? (
+                    <button
+                      onClick={() => deletePost(post.id)}
+                      className="rounded-md border border-red-300/40 px-3 py-1 text-xs font-medium text-red-200 hover:bg-red-300/10"
+                    >
+                      Delete
+                    </button>
+                  ) : null}
+                </div>
               </div>
 
               <p className="mt-4 whitespace-pre-wrap text-white/90">
