@@ -32,7 +32,7 @@ export default function RegisterPage() {
     }
 
     setAccessToken(data.accessToken);
-    router.push("/");
+    router.push(`/profile/${data.user.username}`);
   }
 
   return (

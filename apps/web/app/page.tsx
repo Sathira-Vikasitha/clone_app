@@ -302,12 +302,22 @@ export default function HomePage() {
           <Link className="text-xl font-semibold" href="/">
             InstaClone
           </Link>
-          <button
-            onClick={logout}
-            className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-3">
+            {user ? (
+              <Link
+                className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
+                href={`/profile/${user.username}`}
+              >
+                Profile
+              </Link>
+            ) : null}
+            <button
+              onClick={logout}
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+            >
+              Logout
+            </button>
+          </div>
         </nav>
 
         <div className="rounded-md border border-white/10 bg-white/10 p-6">

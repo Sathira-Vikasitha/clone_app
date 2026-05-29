@@ -30,7 +30,7 @@ export default function LoginPage() {
     }
 
     setAccessToken(data.accessToken);
-    router.push("/");
+    router.push(`/profile/${data.user.username}`);
   }
 
   return (

@@ -5,12 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
-import type { UserProfile } from "@/lib/types";
+import type { User, UserProfile } from "@/lib/types";
 
 export default function ProfilePage() {
   const params = useParams<{ username: string }>();
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [me, setMe] = useState<User | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -20,6 +21,14 @@ export default function ProfilePage() {
       router.push("/login");
       return;
     }
+
+    apiFetch("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then(setMe);
 
     apiFetch(`/users/${params.username}`, {
       headers: {
@@ -54,12 +63,22 @@ export default function ProfilePage() {
           <Link className="text-xl font-semibold" href="/">
             InstaClone
           </Link>
-          <Link
-            className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-            href="/"
-          >
-            Feed
-          </Link>
+          <div className="flex items-center gap-3">
+            {me?.username === profile?.username ? (
+              <Link
+                className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
+                href="/profile/edit"
+              >
+                Edit profile
+              </Link>
+            ) : null}
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/"
+            >
+              Feed
+            </Link>
+          </div>
         </nav>
 
         {error ? (

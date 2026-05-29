@@ -22,6 +22,12 @@ const loginSchema = z.object({
   password: z.string().min(6)
 });
 
+const updateMeSchema = z.object({
+  name: z.string().min(2).max(80),
+  bio: z.string().max(160).optional().or(z.literal("")),
+  avatarUrl: z.string().url().optional().or(z.literal(""))
+});
+
 export async function register(req: Request, res: Response) {
   try {
     const body = registerSchema.parse(req.body);
@@ -114,4 +120,31 @@ export async function me(req: Request, res: Response) {
     bio: user.bio,
     avatarUrl: user.avatarUrl
   });
+}
+
+export async function updateMe(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const body = updateMeSchema.parse(req.body);
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: body.name,
+        bio: body.bio || null,
+        avatarUrl: body.avatarUrl || null
+      }
+    });
+
+    return res.json({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      bio: user.bio,
+      avatarUrl: user.avatarUrl
+    });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Update profile failed" });
+  }
 }
