@@ -5,44 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
-
-type User = {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-  bio: string | null;
-  avatarUrl: string | null;
-};
-
-type Post = {
-  id: string;
-  caption: string;
-  imageUrl: string | null;
-  createdAt: string;
-  likedByMe: boolean;
-  author: {
-    id: string;
-    name: string;
-    username: string;
-    avatarUrl: string | null;
-  };
-  comments: {
-    id: string;
-    body: string;
-    createdAt: string;
-    author: {
-      id: string;
-      name: string;
-      username: string;
-      avatarUrl: string | null;
-    };
-  }[];
-  _count: {
-    likes: number;
-    comments: number;
-  };
-};
+import type { Post, User } from "@/lib/types";
 
 export default function HomePage() {
   const router = useRouter();
@@ -419,8 +382,18 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="font-semibold">{post.author.name}</p>
-                  <p className="text-sm text-white/55">@{post.author.username}</p>
+                  <Link
+                    className="font-semibold hover:text-teal-200"
+                    href={`/profile/${post.author.username}`}
+                  >
+                    {post.author.name}
+                  </Link>
+                  <Link
+                    className="block text-sm text-white/55 hover:text-teal-200"
+                    href={`/profile/${post.author.username}`}
+                  >
+                    @{post.author.username}
+                  </Link>
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="text-xs text-white/45">

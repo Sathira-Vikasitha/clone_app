@@ -1,0 +1,50 @@
+export type User = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  bio: string | null;
+  avatarUrl: string | null;
+};
+
+export type Post = {
+  id: string;
+  caption: string;
+  imageUrl: string | null;
+  createdAt: string;
+  likedByMe: boolean;
+  author: {
+    id: string;
+    name: string;
+    username: string;
+    avatarUrl: string | null;
+  };
+  comments: {
+    id: string;
+    body: string;
+    createdAt: string;
+    author: {
+      id: string;
+      name: string;
+      username: string;
+      avatarUrl: string | null;
+    };
+  }[];
+  _count: {
+    likes: number;
+    comments: number;
+  };
+};
+
+export type UserProfile = {
+  id: string;
+  name: string;
+  username: string;
+  bio: string | null;
+  avatarUrl: string | null;
+  createdAt: string;
+  posts: Post[];
+  _count: {
+    posts: number;
+  };
+};

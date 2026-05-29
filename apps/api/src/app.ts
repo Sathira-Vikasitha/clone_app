@@ -5,6 +5,7 @@ import { env } from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import postRoutes from "./modules/posts/posts.routes.js";
 import uploadRoutes from "./modules/uploads/uploads.routes.js";
+import userRoutes from "./modules/users/users.routes.js";
 
 export const app = express();
 
@@ -23,3 +24,4 @@ app.get("/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/users", userRoutes);
