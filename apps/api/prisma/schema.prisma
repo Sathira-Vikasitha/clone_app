@@ -18,6 +18,8 @@ model User {
   posts        Post[]
   likes        PostLike[]
   comments     PostComment[]
+  conversations ConversationMember[]
+  sentMessages  Message[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -61,4 +63,37 @@ model PostComment {
 
   @@index([postId])
   @@index([authorId])
+}
+
+model Conversation {
+  id        String               @id @default(cuid())
+  members   ConversationMember[]
+  messages  Message[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
+
+model ConversationMember {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+  @@index([senderId])
 }

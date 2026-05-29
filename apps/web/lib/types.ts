@@ -48,3 +48,31 @@ export type UserProfile = {
     posts: number;
   };
 };
+
+export type ChatUser = {
+  id: string;
+  name: string;
+  username: string;
+  avatarUrl: string | null;
+};
+
+export type Message = {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  body: string;
+  createdAt: string;
+  sender: ChatUser;
+};
+
+export type Conversation = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  members: {
+    id: string;
+    userId: string;
+    user: ChatUser;
+  }[];
+  messages: Message[];
+};
