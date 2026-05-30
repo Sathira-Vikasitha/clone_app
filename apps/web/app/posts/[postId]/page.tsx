@@ -61,6 +61,10 @@ export default function PostDetailPage() {
       return `/profile/${post.author.username}`;
     }
 
+    if (from === "saved") {
+      return "/saved";
+    }
+
     return "/";
   }
 
@@ -101,6 +105,27 @@ export default function PostDetailPage() {
           ...post._count,
           likes: post._count.likes + (data.liked ? 1 : -1),
         },
+      });
+    }
+  }
+
+  async function toggleSave() {
+    const token = getAccessToken();
+
+    if (!token || !post) {
+      return;
+    }
+
+    const response = await apiFetch(`/posts/${post.id}/save`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setPost({
+        ...post,
+        savedByMe: data.saved,
       });
     }
   }
@@ -161,6 +186,12 @@ export default function PostDetailPage() {
             >
               Messages
             </Link>
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/saved"
+            >
+              Saved
+            </Link>
             {me ? (
               <Link
                 className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
@@ -177,7 +208,11 @@ export default function PostDetailPage() {
             className="rounded-md border border-teal-300/40 px-4 py-2 text-sm text-teal-200"
             href={getFallbackHref()}
           >
-            {from === "profile" ? "Go to profile" : "Go to feed"}
+            {from === "profile"
+              ? "Go to profile"
+              : from === "saved"
+                ? "Go to saved"
+                : "Go to feed"}
           </Link>
         </div>
 
@@ -220,6 +255,18 @@ export default function PostDetailPage() {
               >
                 {post.likedByMe ? "Liked" : "Like"} ({post._count.likes})
               </button>
+              {me?.id !== post.author.id ? (
+                <button
+                  onClick={toggleSave}
+                  className={`rounded-md px-4 py-2 font-medium ${
+                    post.savedByMe
+                      ? "bg-white text-neutral-950"
+                      : "border border-white/15 text-white/75"
+                  }`}
+                >
+                  {post.savedByMe ? "Saved" : "Save"}
+                </button>
+              ) : null}
               <span className="text-white/55">{post._count.comments} comments</span>
             </div>
 

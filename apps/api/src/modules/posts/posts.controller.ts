@@ -7,7 +7,9 @@ import {
   deletePostForOwner,
   getFeed,
   getPostById,
+  getSavedPosts,
   togglePostLike,
+  togglePostSave,
   updatePostForOwner,
 } from "./posts.service.js";
 
@@ -54,6 +56,13 @@ export async function feed(req: Request, res: Response) {
   return res.json(posts.map((post) => mapPost(post, userId)));
 }
 
+export async function saved(req: Request, res: Response) {
+  const userId = (req as any).userId as string;
+  const posts = await getSavedPosts(userId);
+
+  return res.json(posts.map((post) => mapPost(post, userId)));
+}
+
 export async function detail(req: Request, res: Response) {
   const userId = (req as any).userId as string;
   const postId = req.params.postId;
@@ -85,6 +94,23 @@ export async function like(req: Request, res: Response) {
     return res.json(result);
   } catch (error: any) {
     return res.status(400).json({ message: error.message || "Like failed" });
+  }
+}
+
+export async function save(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const postId = req.params.postId;
+
+    if (!postId || Array.isArray(postId)) {
+      return res.status(400).json({ message: "Post id is required" });
+    }
+
+    const result = await togglePostSave(postId, userId);
+
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Save failed" });
   }
 }
 
@@ -184,5 +210,6 @@ function mapPost(post: any, currentUserId: string) {
   return {
     ...post,
     likedByMe: post.likes.some((like: { userId: string }) => like.userId === currentUserId),
+    savedByMe: post.saves.some((save: { userId: string }) => save.userId === currentUserId),
   };
 }

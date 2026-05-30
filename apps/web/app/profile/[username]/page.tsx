@@ -7,7 +7,7 @@ import { NotificationsLink } from "@/components/NotificationsLink";
 import { SearchLink } from "@/components/SearchLink";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
-import type { User, UserProfile } from "@/lib/types";
+import type { Post, User, UserProfile } from "@/lib/types";
 
 export default function ProfilePage() {
   const params = useParams<{ username: string }>();
@@ -76,6 +76,32 @@ export default function ProfilePage() {
     }
   }
 
+  async function toggleSave(postId: string) {
+    const token = getAccessToken();
+
+    if (!token || !profile) {
+      return;
+    }
+
+    const response = await apiFetch(`/posts/${postId}/save`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const data = await response.json();
+
+    setProfile({
+      ...profile,
+      posts: profile.posts.map((post: Post) =>
+        post.id === postId ? { ...post, savedByMe: data.saved } : post,
+      ),
+    });
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
@@ -91,6 +117,12 @@ export default function ProfilePage() {
               href="/messages"
             >
               Messages
+            </Link>
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/saved"
+            >
+              Saved
             </Link>
             {me?.username === profile?.username ? (
               <Link
@@ -171,12 +203,26 @@ export default function ProfilePage() {
                     <span>{post._count.likes} likes</span>
                     <span>{post._count.comments} comments</span>
                   </div>
-                  <Link
-                    className="mt-4 inline-flex rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
-                    href={`/posts/${post.id}?from=profile`}
-                  >
-                    View post
-                  </Link>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Link
+                      className="inline-flex rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                      href={`/posts/${post.id}?from=profile`}
+                    >
+                      View post
+                    </Link>
+                    {me?.id !== post.author.id ? (
+                      <button
+                        onClick={() => toggleSave(post.id)}
+                        className={`rounded-md px-3 py-2 text-sm font-medium ${
+                          post.savedByMe
+                            ? "bg-white text-neutral-950"
+                            : "border border-white/15 text-white/80"
+                        }`}
+                      >
+                        {post.savedByMe ? "Saved" : "Save"}
+                      </button>
+                    ) : null}
+                  </div>
                 </article>
               ))}
             </section>

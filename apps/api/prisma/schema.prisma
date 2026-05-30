@@ -17,6 +17,7 @@ model User {
   avatarUrl    String?
   posts        Post[]
   likes        PostLike[]
+  savedPosts   PostSave[]
   comments     PostComment[]
   commentReplies PostCommentReply[]
   conversations ConversationMember[]
@@ -34,6 +35,7 @@ model Post {
   authorId  String
   author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
   likes     PostLike[]
+  saves     PostSave[]
   comments  PostComment[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -52,6 +54,19 @@ model PostLike {
 
   @@unique([postId, userId])
   @@index([userId])
+}
+
+model PostSave {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model PostComment {

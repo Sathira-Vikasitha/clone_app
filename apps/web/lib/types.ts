@@ -13,6 +13,7 @@ export type Post = {
   imageUrl: string | null;
   createdAt: string;
   likedByMe: boolean;
+  savedByMe: boolean;
   author: {
     id: string;
     name: string;

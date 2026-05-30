@@ -30,6 +30,27 @@ export async function getPostById(postId: string, userId: string) {
   });
 }
 
+export async function getSavedPosts(userId: string) {
+  const savedPosts = await prisma.postSave.findMany({
+    where: {
+      userId,
+      post: {
+        authorId: {
+          not: userId,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    include: {
+      post: {
+        include: postInclude(userId),
+      },
+    },
+  });
+
+  return savedPosts.map((savedPost) => savedPost.post);
+}
+
 export async function togglePostLike(postId: string, userId: string) {
   const existing = await prisma.postLike.findUnique({
     where: {
@@ -75,6 +96,48 @@ export async function togglePostLike(postId: string, userId: string) {
   }
 
   return { liked: true };
+}
+
+export async function togglePostSave(postId: string, userId: string) {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { authorId: true },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  const existing = await prisma.postSave.findUnique({
+    where: {
+      postId_userId: {
+        postId,
+        userId,
+      },
+    },
+  });
+
+  if (post.authorId === userId) {
+    if (existing) {
+      await prisma.postSave.delete({ where: { id: existing.id } });
+    }
+
+    return { saved: false };
+  }
+
+  if (existing) {
+    await prisma.postSave.delete({ where: { id: existing.id } });
+    return { saved: false };
+  }
+
+  await prisma.postSave.create({
+    data: {
+      postId,
+      userId,
+    },
+  });
+
+  return { saved: true };
 }
 
 export async function addPostComment(data: {
@@ -185,6 +248,11 @@ function postInclude(currentUserId: string) {
       },
     },
     likes: {
+      select: {
+        userId: true,
+      },
+    },
+    saves: {
       select: {
         userId: true,
       },

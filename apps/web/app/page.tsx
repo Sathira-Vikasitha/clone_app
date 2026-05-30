@@ -186,6 +186,34 @@ export default function HomePage() {
     );
   }
 
+  async function toggleSave(postId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const response = await apiFetch(`/posts/${postId}/save`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const data = await response.json();
+
+    setPosts((currentPosts) =>
+      currentPosts.map((post) =>
+        post.id === postId ? { ...post, savedByMe: data.saved } : post,
+      ),
+    );
+  }
+
   async function addComment(postId: string) {
     const token = getAccessToken();
     const body = commentText[postId]?.trim();
@@ -316,6 +344,12 @@ export default function HomePage() {
               href="/messages"
             >
               Messages
+            </Link>
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/saved"
+            >
+              Saved
             </Link>
             {user ? (
               <Link
@@ -503,6 +537,18 @@ export default function HomePage() {
                 >
                   {post.likedByMe ? "Liked" : "Like"} ({post._count.likes})
                 </button>
+                {user?.id !== post.author.id ? (
+                  <button
+                    onClick={() => toggleSave(post.id)}
+                    className={`rounded-md px-4 py-2 font-medium ${
+                      post.savedByMe
+                        ? "bg-white text-neutral-950"
+                        : "border border-white/15 text-white/75"
+                    }`}
+                  >
+                    {post.savedByMe ? "Saved" : "Save"}
+                  </button>
+                ) : null}
                 <span className="text-white/55">
                   {post._count.comments} comments
                 </span>
