@@ -153,3 +153,23 @@ export type StorePurchaseRequest = {
     sellerId: string;
   };
 };
+
+export type StorePurchaseHistory = {
+  id: string;
+  itemId: string;
+  buyerId: string;
+  paymentMethod: string;
+  status: string;
+  receiptUrl: string | null;
+  createdAt: string;
+  item: {
+    id: string;
+    title: string;
+    description: string | null;
+    imageUrl: string;
+    priceAmount: number;
+    currency: string;
+    sellerId: string;
+    seller: ChatUser;
+  };
+};
