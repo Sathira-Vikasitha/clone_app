@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { NotificationsLink } from "@/components/NotificationsLink";
-import { SearchLink } from "@/components/SearchLink";
+import { AppNav } from "@/components/AppNav";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Post, User } from "@/lib/types";
@@ -70,11 +69,6 @@ export default function HomePage() {
 
     return () => window.clearTimeout(timeoutId);
   }, [loadFeed, router]);
-
-  function logout() {
-    clearAccessToken();
-    router.push("/login");
-  }
 
   async function createPost(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -332,59 +326,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
-        <nav className="flex items-center justify-between">
-          <Link className="text-xl font-semibold" href="/">
-            InstaClone
-          </Link>
-          <div className="flex items-center gap-3">
-            <SearchLink />
-            <NotificationsLink />
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/messages"
-            >
-              Messages
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/saved"
-            >
-              Saved
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/store"
-            >
-              Store
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/purchases"
-            >
-              Purchases
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/orders"
-            >
-              Orders
-            </Link>
-            {user ? (
-              <Link
-                className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
-                href={`/profile/${user.username}`}
-              >
-                Profile
-              </Link>
-            ) : null}
-            <button
-              onClick={logout}
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-            >
-              Logout
-            </button>
-          </div>
-        </nav>
+        <AppNav user={user} showLogout />
 
         <div className="rounded-md border border-white/10 bg-white/10 p-6">
           <p className="text-sm uppercase tracking-[0.2em] text-teal-300">

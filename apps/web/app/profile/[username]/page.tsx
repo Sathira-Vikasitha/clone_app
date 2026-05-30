@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NotificationsLink } from "@/components/NotificationsLink";
-import { SearchLink } from "@/components/SearchLink";
+import { AppNav } from "@/components/AppNav";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Post, User, UserProfile } from "@/lib/types";
@@ -105,59 +104,16 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
-        <nav className="flex items-center justify-between">
-          <Link className="text-xl font-semibold" href="/">
-            InstaClone
+        <AppNav user={me} />
+
+        {me?.username === profile?.username ? (
+          <Link
+            className="w-fit rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
+            href="/profile/edit"
+          >
+            Edit profile
           </Link>
-          <div className="flex items-center gap-3">
-            <SearchLink />
-            <NotificationsLink />
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/messages"
-            >
-              Messages
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/saved"
-            >
-              Saved
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/store"
-            >
-              Store
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/purchases"
-            >
-              Purchases
-            </Link>
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/orders"
-            >
-              Orders
-            </Link>
-            {me?.username === profile?.username ? (
-              <Link
-                className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
-                href="/profile/edit"
-              >
-                Edit profile
-              </Link>
-            ) : null}
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/"
-            >
-              Feed
-            </Link>
-          </div>
-        </nav>
+        ) : null}
 
         {error ? (
           <p className="rounded-md border border-red-300/30 bg-red-300/10 p-4 text-red-200">

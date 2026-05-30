@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AppNav } from "@/components/AppNav";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { User } from "@/lib/types";
@@ -119,17 +120,13 @@ export default function EditProfilePage() {
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-2xl flex-col gap-8">
-        <nav className="flex items-center justify-between">
-          <Link className="text-xl font-semibold" href="/">
-            InstaClone
-          </Link>
-          <Link
-            className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-            href={user ? `/profile/${user.username}` : "/"}
-          >
-            Back
-          </Link>
-        </nav>
+        <AppNav user={user} />
+        <Link
+          className="w-fit rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+          href={user ? `/profile/${user.username}` : "/"}
+        >
+          Back to profile
+        </Link>
 
         <form
           onSubmit={saveProfile}
