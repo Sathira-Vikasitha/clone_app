@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NotificationsLink } from "@/components/NotificationsLink";
+import { SearchLink } from "@/components/SearchLink";
 import { API_URL, apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Conversation, Message, User } from "@/lib/types";
@@ -195,6 +196,7 @@ export default function MessagesPage() {
             InstaClone
           </Link>
           <div className="flex items-center gap-3">
+            <SearchLink />
             {me ? (
               <Link
                 className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"

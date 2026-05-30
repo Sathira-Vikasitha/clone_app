@@ -18,6 +18,7 @@ model User {
   posts        Post[]
   likes        PostLike[]
   comments     PostComment[]
+  commentReplies PostCommentReply[]
   conversations ConversationMember[]
   sentMessages  Message[]
   notifications Notification[] @relation("NotificationRecipient")
@@ -60,10 +61,25 @@ model PostComment {
   authorId  String
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  replies   PostCommentReply[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([postId])
+  @@index([authorId])
+}
+
+model PostCommentReply {
+  id        String      @id @default(cuid())
+  body      String
+  commentId String
+  authorId  String
+  comment   PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([commentId])
   @@index([authorId])
 }
 

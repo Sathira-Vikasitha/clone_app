@@ -29,6 +29,17 @@ export type Post = {
       username: string;
       avatarUrl: string | null;
     };
+    replies: {
+      id: string;
+      body: string;
+      createdAt: string;
+      author: {
+        id: string;
+        name: string;
+        username: string;
+        avatarUrl: string | null;
+      };
+    }[];
   }[];
   _count: {
     likes: number;
@@ -88,4 +99,15 @@ export type Notification = {
   readAt: string | null;
   createdAt: string;
   actor: ChatUser;
+};
+
+export type UserSearchResult = {
+  id: string;
+  name: string;
+  username: string;
+  bio: string | null;
+  avatarUrl: string | null;
+  _count: {
+    posts: number;
+  };
 };

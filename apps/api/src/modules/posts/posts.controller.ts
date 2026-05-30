@@ -1,10 +1,12 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import {
+  addCommentReply,
   addPostComment,
   createPost,
   deletePostForOwner,
   getFeed,
+  getPostById,
   togglePostLike,
   updatePostForOwner,
 } from "./posts.service.js";
@@ -52,6 +54,23 @@ export async function feed(req: Request, res: Response) {
   return res.json(posts.map((post) => mapPost(post, userId)));
 }
 
+export async function detail(req: Request, res: Response) {
+  const userId = (req as any).userId as string;
+  const postId = req.params.postId;
+
+  if (!postId || Array.isArray(postId)) {
+    return res.status(400).json({ message: "Post id is required" });
+  }
+
+  const post = await getPostById(postId, userId);
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  return res.json(mapPost(post, userId));
+}
+
 export async function like(req: Request, res: Response) {
   try {
     const userId = (req as any).userId as string;
@@ -88,6 +107,28 @@ export async function comment(req: Request, res: Response) {
     return res.status(201).json(createdComment);
   } catch (error: any) {
     return res.status(400).json({ message: error.message || "Comment failed" });
+  }
+}
+
+export async function reply(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const commentId = req.params.commentId;
+    const body = commentSchema.parse(req.body);
+
+    if (!commentId || Array.isArray(commentId)) {
+      return res.status(400).json({ message: "Comment id is required" });
+    }
+
+    const createdReply = await addCommentReply({
+      commentId,
+      authorId: userId,
+      body: body.body,
+    });
+
+    return res.status(201).json(createdReply);
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Reply failed" });
   }
 }
 

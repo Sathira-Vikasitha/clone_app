@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NotificationsLink } from "@/components/NotificationsLink";
+import { SearchLink } from "@/components/SearchLink";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { User, UserProfile } from "@/lib/types";
@@ -57,6 +58,24 @@ export default function ProfilePage() {
       .catch((caughtError: Error) => setError(caughtError.message));
   }, [params.username, router]);
 
+  async function startChatWithProfile() {
+    const token = getAccessToken();
+
+    if (!token || !profile) {
+      return;
+    }
+
+    const response = await apiFetch("/chats/start", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ username: profile.username }),
+    });
+
+    if (response.ok) {
+      router.push("/messages");
+    }
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
@@ -65,6 +84,7 @@ export default function ProfilePage() {
             InstaClone
           </Link>
           <div className="flex items-center gap-3">
+            <SearchLink />
             <NotificationsLink />
             <Link
               className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
@@ -119,6 +139,14 @@ export default function ProfilePage() {
                   <p className="mt-4 text-sm text-teal-200">
                     {profile._count.posts} posts
                   </p>
+                  {me?.username !== profile.username ? (
+                    <button
+                      onClick={startChatWithProfile}
+                      className="mt-5 rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
+                    >
+                      Message
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </header>
@@ -143,6 +171,12 @@ export default function ProfilePage() {
                     <span>{post._count.likes} likes</span>
                     <span>{post._count.comments} comments</span>
                   </div>
+                  <Link
+                    className="mt-4 inline-flex rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                    href={`/posts/${post.id}?from=profile`}
+                  >
+                    View post
+                  </Link>
                 </article>
               ))}
             </section>

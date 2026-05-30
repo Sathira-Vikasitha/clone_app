@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NotificationsLink } from "@/components/NotificationsLink";
+import { SearchLink } from "@/components/SearchLink";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Post, User } from "@/lib/types";
@@ -21,6 +22,22 @@ export default function HomePage() {
   const [editCaption, setEditCaption] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
   const [error, setError] = useState("");
+
+  const loadFeed = useCallback(async (token = getAccessToken()) => {
+    if (!token) {
+      return;
+    }
+
+    const response = await apiFetch("/posts", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      setPosts(await response.json());
+    }
+  }, []);
 
   useEffect(() => {
     const token = getAccessToken();
@@ -47,28 +64,16 @@ export default function HomePage() {
         router.push("/login");
       });
 
-    loadFeed(token);
-  }, [router]);
+    const timeoutId = window.setTimeout(() => {
+      loadFeed(token);
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [loadFeed, router]);
 
   function logout() {
     clearAccessToken();
     router.push("/login");
-  }
-
-  async function loadFeed(token = getAccessToken()) {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiFetch("/posts", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
-      setPosts(await response.json());
-    }
   }
 
   async function createPost(event: React.FormEvent<HTMLFormElement>) {
@@ -304,6 +309,7 @@ export default function HomePage() {
             InstaClone
           </Link>
           <div className="flex items-center gap-3">
+            <SearchLink />
             <NotificationsLink />
             <Link
               className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
@@ -466,9 +472,9 @@ export default function HomePage() {
                 </div>
               ) : (
                 <>
-                  <p className="mt-4 whitespace-pre-wrap text-white/90">
-                    {post.caption}
-                  </p>
+              <p className="mt-4 whitespace-pre-wrap text-white/90">
+                {post.caption}
+              </p>
 
                   {post.imageUrl ? (
                     <img
@@ -481,6 +487,12 @@ export default function HomePage() {
               )}
 
               <div className="mt-4 flex items-center gap-3 text-sm">
+                <Link
+                  className="rounded-md border border-white/15 px-4 py-2 font-medium text-white/75"
+                  href={`/posts/${post.id}?from=feed`}
+                >
+                  View post
+                </Link>
                 <button
                   onClick={() => toggleLike(post.id)}
                   className={`rounded-md px-4 py-2 font-medium ${
@@ -497,7 +509,7 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 flex flex-col gap-3">
-                {post.comments.map((comment) => (
+                {post.comments.slice(-2).map((comment) => (
                   <div key={comment.id} className="rounded-md bg-neutral-900 p-3">
                     <p className="text-sm font-semibold">
                       @{comment.author.username}
@@ -505,6 +517,14 @@ export default function HomePage() {
                     <p className="mt-1 text-sm text-white/75">{comment.body}</p>
                   </div>
                 ))}
+                {post.comments.length > 2 ? (
+                  <Link
+                    className="text-sm font-medium text-teal-200 hover:text-teal-100"
+                    href={`/posts/${post.id}?from=feed`}
+                  >
+                    View all {post._count.comments} comments
+                  </Link>
+                ) : null}
               </div>
 
               <div className="mt-4 flex gap-2">

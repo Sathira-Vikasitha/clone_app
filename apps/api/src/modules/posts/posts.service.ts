@@ -23,6 +23,13 @@ export async function getFeed(userId: string) {
   });
 }
 
+export async function getPostById(postId: string, userId: string) {
+  return prisma.post.findUnique({
+    where: { id: postId },
+    include: postInclude(userId),
+  });
+}
+
 export async function togglePostLike(postId: string, userId: string) {
   const existing = await prisma.postLike.findUnique({
     where: {
@@ -107,6 +114,26 @@ export async function addPostComment(data: {
   return comment;
 }
 
+export async function addCommentReply(data: {
+  commentId: string;
+  authorId: string;
+  body: string;
+}) {
+  return prisma.postCommentReply.create({
+    data,
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          avatarUrl: true,
+        },
+      },
+    },
+  });
+}
+
 export async function deletePostForOwner(postId: string, authorId: string) {
   const result = await prisma.post.deleteMany({
     where: {
@@ -171,6 +198,19 @@ function postInclude(currentUserId: string) {
             name: true,
             username: true,
             avatarUrl: true,
+          },
+        },
+        replies: {
+          orderBy: { createdAt: "asc" as const },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                avatarUrl: true,
+              },
+            },
           },
         },
       },

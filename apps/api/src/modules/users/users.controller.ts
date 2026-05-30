@@ -1,5 +1,13 @@
 import type { Request, Response } from "express";
-import { getUserProfile } from "./users.service.js";
+import { getUserProfile, searchUsers } from "./users.service.js";
+
+export async function search(req: Request, res: Response) {
+  const currentUserId = (req as any).userId as string;
+  const query = typeof req.query.q === "string" ? req.query.q : "";
+  const users = await searchUsers(query, currentUserId);
+
+  return res.json(users);
+}
 
 export async function profile(req: Request, res: Response) {
   const currentUserId = (req as any).userId as string;

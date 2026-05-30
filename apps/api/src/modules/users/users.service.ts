@@ -59,3 +59,55 @@ export async function getUserProfile(username: string, currentUserId: string) {
     },
   });
 }
+
+export async function searchUsers(query: string, currentUserId: string) {
+  const searchQuery = query.replace(/^@/, "").trim();
+
+  if (!searchQuery) {
+    return [];
+  }
+
+  return prisma.user.findMany({
+    where: {
+      AND: [
+        {
+          id: {
+            not: currentUserId,
+          },
+        },
+        {
+          OR: [
+            {
+              username: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              name: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      ],
+    },
+    take: 10,
+    orderBy: {
+      username: "asc",
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      bio: true,
+      avatarUrl: true,
+      _count: {
+        select: {
+          posts: true,
+        },
+      },
+    },
+  });
+}
