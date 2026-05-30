@@ -70,6 +70,50 @@ export async function getMyStoreItems(userId: string) {
   });
 }
 
+export async function updateStoreItemForSeller(data: {
+  itemId: string;
+  sellerId: string;
+  title: string;
+  description?: string;
+  imageUrl: string;
+  priceAmount: number;
+  currency: string;
+}) {
+  const item = await prisma.storeItem.findFirst({
+    where: {
+      id: data.itemId,
+      sellerId: data.sellerId,
+    },
+  });
+
+  if (!item) {
+    return null;
+  }
+
+  return prisma.storeItem.update({
+    where: { id: data.itemId },
+    data: {
+      title: data.title,
+      description: data.description || null,
+      imageUrl: data.imageUrl,
+      priceAmount: data.priceAmount,
+      currency: data.currency,
+    },
+    include: storeItemInclude(data.sellerId),
+  });
+}
+
+export async function deleteStoreItemForSeller(itemId: string, sellerId: string) {
+  const result = await prisma.storeItem.deleteMany({
+    where: {
+      id: itemId,
+      sellerId,
+    },
+  });
+
+  return result.count > 0;
+}
+
 export async function submitReceiptPurchase(data: {
   itemId: string;
   buyerId: string;

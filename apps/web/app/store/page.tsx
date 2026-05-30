@@ -21,6 +21,12 @@ export default function StorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [receiptFiles, setReceiptFiles] = useState<Record<string, File | null>>({});
+  const [editingItemId, setEditingItemId] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editPriceAmount, setEditPriceAmount] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState("");
+  const [visibleItemCount, setVisibleItemCount] = useState(4);
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
@@ -92,6 +98,14 @@ export default function StorePage() {
 
     return () => window.clearTimeout(timeoutId);
   }, [loadStore, searchQuery]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setVisibleItemCount(4);
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   async function uploadFile(file: File) {
     const token = getAccessToken();
@@ -260,6 +274,84 @@ export default function StorePage() {
     }
   }
 
+  function startEditingItem(item: StoreItem) {
+    setEditingItemId(item.id);
+    setEditTitle(item.title);
+    setEditDescription(item.description || "");
+    setEditPriceAmount(String(item.priceAmount));
+    setEditImageUrl(item.imageUrl);
+  }
+
+  function cancelEditingItem() {
+    setEditingItemId("");
+    setEditTitle("");
+    setEditDescription("");
+    setEditPriceAmount("");
+    setEditImageUrl("");
+  }
+
+  async function saveStoreItemEdit(itemId: string) {
+    const token = getAccessToken();
+    const amount = Number(editPriceAmount);
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    if (!editTitle.trim() || !editImageUrl || !amount) {
+      setMessage("Edit title, price, and image URL are required.");
+      return;
+    }
+
+    const response = await apiFetch(`/store/${itemId}`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        title: editTitle,
+        description: editDescription,
+        imageUrl: editImageUrl,
+        priceAmount: amount,
+        currency: "LKR",
+      }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Could not update store item.");
+      return;
+    }
+
+    setMessage("Store item updated.");
+    cancelEditingItem();
+    loadStore(token);
+  }
+
+  async function deleteStoreItem(itemId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const confirmed = window.confirm("Delete this store item?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    const response = await apiFetch(`/store/${itemId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      setMessage("Store item deleted.");
+      loadStore(token);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
@@ -378,33 +470,95 @@ export default function StorePage() {
                 No store images found.
               </p>
             ) : null}
-            {items.map((item) => {
+            {items.slice(0, visibleItemCount).map((item) => {
               const isMine = me?.id === item.sellerId;
               const purchaseStatus = item.purchase?.status;
+              const isEditing = editingItemId === item.id;
 
               return (
                 <article key={item.id} className="rounded-md border border-white/10 bg-white/10 p-4">
                   <img className="aspect-video w-full rounded-md object-cover" src={item.imageUrl} alt="" />
-                  <div className="mt-4 flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-xl font-semibold">{item.title}</h3>
-                      <p className="mt-1 text-sm text-white/55">
-                        by @{item.seller.username}
-                      </p>
+                  {isEditing ? (
+                    <div className="mt-4 flex flex-col gap-3">
+                      <input
+                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        value={editTitle}
+                        onChange={(event) => setEditTitle(event.target.value)}
+                      />
+                      <input
+                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        type="number"
+                        min="1"
+                        value={editPriceAmount}
+                        onChange={(event) => setEditPriceAmount(event.target.value)}
+                      />
+                      <textarea
+                        className="min-h-24 resize-none rounded-md border border-white/15 bg-neutral-900 px-3 py-2 outline-none focus:border-teal-300"
+                        value={editDescription}
+                        onChange={(event) => setEditDescription(event.target.value)}
+                      />
+                      <input
+                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        value={editImageUrl}
+                        onChange={(event) => setEditImageUrl(event.target.value)}
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => saveStoreItemEdit(item.id)}
+                          className="rounded-md bg-teal-300 px-3 py-2 text-sm font-semibold text-neutral-950"
+                        >
+                          Save changes
+                        </button>
+                        <button
+                          onClick={cancelEditingItem}
+                          className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
-                    <p className="rounded-md bg-white px-3 py-2 text-sm font-bold text-neutral-950">
-                      {item.currency} {item.priceAmount}
-                    </p>
-                  </div>
-                  {item.description ? (
-                    <p className="mt-3 text-sm text-white/70">{item.description}</p>
-                  ) : null}
+                  ) : (
+                    <>
+                      <div className="mt-4 flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-xl font-semibold">{item.title}</h3>
+                          <p className="mt-1 text-sm text-white/55">
+                            by @{item.seller.username}
+                          </p>
+                        </div>
+                        <p className="rounded-md bg-white px-3 py-2 text-sm font-bold text-neutral-950">
+                          {item.currency} {item.priceAmount}
+                        </p>
+                      </div>
+                      {item.description ? (
+                        <p className="mt-3 text-sm text-white/70">{item.description}</p>
+                      ) : null}
+                    </>
+                  )}
 
                   <div className="mt-4 flex flex-col gap-3">
                     {isMine ? (
-                      <p className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/70">
-                        This is your store item.
-                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <p className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/70">
+                          This is your store item.
+                        </p>
+                        {!isEditing ? (
+                          <>
+                            <button
+                              onClick={() => startEditingItem(item)}
+                              className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => deleteStoreItem(item.id)}
+                              className="rounded-md border border-red-300/40 px-3 py-2 text-sm text-red-200"
+                            >
+                              Delete
+                            </button>
+                          </>
+                        ) : null}
+                      </div>
                     ) : item.canDownload ? (
                       <a
                         className="rounded-md bg-teal-300 px-4 py-2 text-center text-sm font-semibold text-neutral-950"
@@ -453,6 +607,14 @@ export default function StorePage() {
               );
             })}
           </div>
+          {items.length > visibleItemCount ? (
+            <button
+              onClick={() => setVisibleItemCount((currentCount) => currentCount + 4)}
+              className="mt-5 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/10"
+            >
+              See more store images
+            </button>
+          ) : null}
         </section>
 
         <section className="rounded-md border border-white/10 bg-white/10 p-5">

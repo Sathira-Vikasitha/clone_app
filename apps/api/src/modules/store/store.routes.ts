@@ -9,7 +9,9 @@ import {
   myPurchases,
   receiptPurchase,
   reject,
+  remove,
   sellerRequests,
+  update,
 } from "./store.controller.js";
 
 const router = Router();
@@ -19,6 +21,8 @@ router.post("/", requireAuth, create);
 router.get("/mine", requireAuth, mine);
 router.get("/purchases", requireAuth, myPurchases);
 router.get("/seller/requests", requireAuth, sellerRequests);
+router.patch("/:itemId", requireAuth, update);
+router.delete("/:itemId", requireAuth, remove);
 router.post("/:itemId/purchase/receipt", requireAuth, receiptPurchase);
 router.post("/:itemId/purchase/card-demo", requireAuth, demoCardPurchase);
 router.patch("/purchases/:purchaseId/approve", requireAuth, approve);

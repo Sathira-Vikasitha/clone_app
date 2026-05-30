@@ -3,11 +3,13 @@ import { z } from "zod";
 import {
   createDemoCardPurchase,
   createStoreItem,
+  deleteStoreItemForSeller,
   getMyPurchases,
   getMyStoreItems,
   getSellerPurchaseRequests,
   getStoreItems,
   submitReceiptPurchase,
+  updateStoreItemForSeller,
   updatePurchaseStatus,
 } from "./store.service.js";
 
@@ -81,6 +83,70 @@ export async function mine(req: Request, res: Response) {
   const items = await getMyStoreItems(userId);
 
   return res.json(items.map((item) => mapStoreItem(item, userId)));
+}
+
+export async function update(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const itemId = req.params.itemId;
+    const body = storeItemSchema.parse(req.body);
+
+    if (!itemId || Array.isArray(itemId)) {
+      return res.status(400).json({ message: "Store item id is required" });
+    }
+
+    const itemData: {
+      itemId: string;
+      sellerId: string;
+      title: string;
+      imageUrl: string;
+      priceAmount: number;
+      currency: string;
+      description?: string;
+    } = {
+      itemId,
+      sellerId: userId,
+      title: body.title,
+      imageUrl: body.imageUrl,
+      priceAmount: body.priceAmount,
+      currency: body.currency.toUpperCase(),
+    };
+
+    if (body.description) {
+      itemData.description = body.description;
+    }
+
+    const item = await updateStoreItemForSeller(itemData);
+
+    if (!item) {
+      return res.status(404).json({ message: "Store item not found" });
+    }
+
+    return res.json(mapStoreItem(item, userId));
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Update store item failed" });
+  }
+}
+
+export async function remove(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const itemId = req.params.itemId;
+
+    if (!itemId || Array.isArray(itemId)) {
+      return res.status(400).json({ message: "Store item id is required" });
+    }
+
+    const deleted = await deleteStoreItemForSeller(itemId, userId);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Store item not found" });
+    }
+
+    return res.json({ deleted: true });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Delete store item failed" });
+  }
 }
 
 export async function receiptPurchase(req: Request, res: Response) {
