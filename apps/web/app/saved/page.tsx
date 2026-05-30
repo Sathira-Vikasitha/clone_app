@@ -114,6 +114,12 @@ export default function SavedPostsPage() {
             >
               Feed
             </Link>
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/store"
+            >
+              Store
+            </Link>
           </div>
         </nav>
 

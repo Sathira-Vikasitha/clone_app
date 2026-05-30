@@ -24,6 +24,8 @@ model User {
   sentMessages  Message[]
   notifications Notification[] @relation("NotificationRecipient")
   triggeredNotifications Notification[] @relation("NotificationActor")
+  storeItems   StoreItem[]
+  storePurchases StorePurchase[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -146,5 +148,40 @@ model Notification {
 
   @@index([recipientId])
   @@index([actorId])
+  @@index([createdAt])
+}
+
+model StoreItem {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String
+  priceAmount Int
+  currency    String          @default("LKR")
+  sellerId    String
+  seller      User            @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  purchases   StorePurchase[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([sellerId])
+  @@index([createdAt])
+}
+
+model StorePurchase {
+  id            String    @id @default(cuid())
+  itemId        String
+  buyerId       String
+  paymentMethod String
+  status        String    @default("pending")
+  receiptUrl    String?
+  item          StoreItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  buyer         User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([itemId, buyerId])
+  @@index([buyerId])
+  @@index([status])
   @@index([createdAt])
 }

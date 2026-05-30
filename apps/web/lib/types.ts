@@ -112,3 +112,44 @@ export type UserSearchResult = {
     posts: number;
   };
 };
+
+export type StorePurchaseSummary = {
+  id: string;
+  paymentMethod: "receipt" | "card_demo" | string;
+  status: "pending" | "paid" | "approved" | "rejected" | string;
+  receiptUrl: string | null;
+  createdAt: string;
+};
+
+export type StoreItem = {
+  id: string;
+  title: string;
+  description: string | null;
+  imageUrl: string;
+  priceAmount: number;
+  currency: string;
+  sellerId: string;
+  createdAt: string;
+  canDownload: boolean;
+  purchase: StorePurchaseSummary | null;
+  seller: ChatUser;
+};
+
+export type StorePurchaseRequest = {
+  id: string;
+  itemId: string;
+  buyerId: string;
+  paymentMethod: string;
+  status: string;
+  receiptUrl: string | null;
+  createdAt: string;
+  buyer: ChatUser;
+  item: {
+    id: string;
+    title: string;
+    imageUrl: string;
+    priceAmount: number;
+    currency: string;
+    sellerId: string;
+  };
+};

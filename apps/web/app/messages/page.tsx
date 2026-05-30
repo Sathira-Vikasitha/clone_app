@@ -206,14 +206,20 @@ export default function MessagesPage() {
               </Link>
             ) : null}
             <NotificationsLink />
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/"
-            >
-              Feed
-            </Link>
-          </div>
-        </nav>
+              <Link
+                className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+                href="/"
+              >
+                Feed
+              </Link>
+              <Link
+                className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+                href="/store"
+              >
+                Store
+              </Link>
+            </div>
+          </nav>
 
         <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
           <aside className="rounded-md border border-white/10 bg-white/10 p-4">
