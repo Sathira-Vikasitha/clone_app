@@ -48,7 +48,8 @@ export async function register(req: Request, res: Response) {
         id: user.id,
         name: user.name,
         username: user.username,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error: any) {
@@ -76,7 +77,8 @@ export async function login(req: Request, res: Response) {
         id: user.id,
         name: user.name,
         username: user.username,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error: any) {
@@ -117,6 +119,7 @@ export async function me(req: Request, res: Response) {
     name: user.name,
     username: user.username,
     email: user.email,
+    role: user.role,
     bio: user.bio,
     avatarUrl: user.avatarUrl
   });
@@ -140,8 +143,9 @@ export async function updateMe(req: Request, res: Response) {
       id: user.id,
       name: user.name,
       username: user.username,
-      email: user.email,
-      bio: user.bio,
+    email: user.email,
+    role: user.role,
+    bio: user.bio,
       avatarUrl: user.avatarUrl
     });
   } catch (error: any) {

@@ -8,14 +8,14 @@ import { NotificationsLink } from "./NotificationsLink";
 import { SearchLink } from "./SearchLink";
 
 type AppNavProps = {
-  user?: Pick<User, "username"> | null;
+  user?: Pick<User, "username" | "role"> | null;
   showLogout?: boolean;
 };
 
 const navLinkClass =
   "rounded-md border border-white/15 px-3 py-2 text-sm text-white/80 hover:border-teal-300/50 hover:text-teal-200";
 
-export function AppNav({ user, showLogout = false }: AppNavProps) {
+export function AppNav({ user, showLogout = true }: AppNavProps) {
   const router = useRouter();
 
   function logout() {
@@ -50,6 +50,11 @@ export function AppNav({ user, showLogout = false }: AppNavProps) {
         <Link className={navLinkClass} href="/saved">
           Saved
         </Link>
+        {user?.role === "admin" ? (
+          <Link className={navLinkClass} href="/admin">
+            Admin
+          </Link>
+        ) : null}
         {user ? (
           <Link
             className="rounded-md border border-teal-300/50 px-3 py-2 text-sm text-teal-200 hover:bg-teal-300/10"
@@ -58,9 +63,10 @@ export function AppNav({ user, showLogout = false }: AppNavProps) {
             Profile
           </Link>
         ) : null}
-        {showLogout ? (
+        {user && showLogout ? (
           <button
             onClick={logout}
+            suppressHydrationWarning
             className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80 hover:border-red-300/50 hover:text-red-200"
           >
             Logout

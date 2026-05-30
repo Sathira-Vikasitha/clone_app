@@ -30,7 +30,7 @@ export default function LoginPage() {
     }
 
     setAccessToken(data.accessToken);
-    router.push(`/profile/${data.user.username}`);
+    router.push(data.user.role === "admin" ? "/admin" : `/profile/${data.user.username}`);
   }
 
   return (

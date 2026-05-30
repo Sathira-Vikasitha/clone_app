@@ -3,6 +3,7 @@ export type User = {
   name: string;
   username: string;
   email: string;
+  role: "user" | "admin" | string;
   bio: string | null;
   avatarUrl: string | null;
 };
@@ -180,4 +181,29 @@ export type StorePurchaseHistory = {
     };
     seller: ChatUser;
   };
+};
+
+export type AdminDashboard = {
+  stats: {
+    users: number;
+    posts: number;
+    storeItems: number;
+    purchases: number;
+    pendingReceipts: number;
+    downloads: number;
+  };
+  latestStoreItems: {
+    id: string;
+    title: string;
+    category: string;
+    imageUrl: string;
+    priceAmount: number;
+    currency: string;
+    createdAt: string;
+    seller: ChatUser;
+    _count: {
+      purchases: number;
+      downloads: number;
+    };
+  }[];
 };
