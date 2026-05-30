@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -418,7 +419,13 @@ export default function StorePage() {
             </button>
           </div>
           {imageUrl ? (
-            <img className="mt-4 max-h-72 w-full rounded-md object-cover" src={imageUrl} alt="" />
+            <Image
+              className="mt-4 max-h-72 w-full rounded-md object-cover"
+              src={imageUrl}
+              alt=""
+              width={1200}
+              height={800}
+            />
           ) : null}
           <button className="mt-4 rounded-md bg-teal-300 px-5 py-3 font-semibold text-neutral-950">
             Publish to store
@@ -453,7 +460,13 @@ export default function StorePage() {
 
               return (
                 <article key={item.id} className="rounded-md border border-white/10 bg-white/10 p-4">
-                  <img className="aspect-video w-full rounded-md object-cover" src={item.imageUrl} alt="" />
+                  <Image
+                    className="aspect-video w-full rounded-md object-cover"
+                    src={item.imageUrl}
+                    alt=""
+                    width={900}
+                    height={506}
+                  />
                   {isEditing ? (
                     <div className="mt-4 flex flex-col gap-3">
                       <input

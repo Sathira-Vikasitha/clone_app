@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -127,10 +128,12 @@ export default function ProfilePage() {
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-teal-300 text-3xl font-bold text-neutral-950">
                   {profile.avatarUrl ? (
-                    <img
+                    <Image
                       className="h-full w-full rounded-full object-cover"
                       src={profile.avatarUrl}
                       alt=""
+                      width={96}
+                      height={96}
                     />
                   ) : (
                     profile.name.slice(0, 1).toUpperCase()
@@ -164,10 +167,12 @@ export default function ProfilePage() {
                   className="rounded-md border border-white/10 bg-white/10 p-4"
                 >
                   {post.imageUrl ? (
-                    <img
+                    <Image
                       className="aspect-square w-full rounded-md object-cover"
                       src={post.imageUrl}
                       alt=""
+                      width={600}
+                      height={600}
                     />
                   ) : null}
                   <p className="mt-4 whitespace-pre-wrap text-white/90">

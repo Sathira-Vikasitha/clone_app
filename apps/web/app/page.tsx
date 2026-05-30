@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -380,10 +381,12 @@ export default function HomePage() {
             </button>
           </div>
           {imageUrl ? (
-            <img
+            <Image
               className="mt-4 max-h-80 w-full rounded-md object-cover"
               src={imageUrl}
               alt=""
+              width={1200}
+              height={800}
             />
           ) : null}
           {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
@@ -471,10 +474,12 @@ export default function HomePage() {
               </p>
 
                   {post.imageUrl ? (
-                    <img
+                    <Image
                       className="mt-4 max-h-[520px] w-full rounded-md object-cover"
                       src={post.imageUrl}
                       alt=""
+                      width={1200}
+                      height={900}
                     />
                   ) : null}
                 </>

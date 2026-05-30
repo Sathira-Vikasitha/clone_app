@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -107,7 +108,13 @@ export default function PurchasesPage() {
         <section className="grid gap-5 md:grid-cols-2">
           {purchases.map((purchase) => (
             <article key={purchase.id} className="rounded-md border border-white/10 bg-white/10 p-4">
-              <img className="aspect-video w-full rounded-md object-cover" src={purchase.item.imageUrl} alt="" />
+              <Image
+                className="aspect-video w-full rounded-md object-cover"
+                src={purchase.item.imageUrl}
+                alt=""
+                width={900}
+                height={506}
+              />
               <div className="mt-4 flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-xl font-semibold">{purchase.item.title}</h2>

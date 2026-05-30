@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -140,10 +141,12 @@ export default function EditProfilePage() {
           <div className="mt-6 flex items-center gap-4">
             <div className="flex h-24 w-24 items-center justify-center rounded-full bg-teal-300 text-3xl font-bold text-neutral-950">
               {avatarUrl ? (
-                <img
+                <Image
                   className="h-full w-full rounded-full object-cover"
                   src={avatarUrl}
                   alt=""
+                  width={96}
+                  height={96}
                 />
               ) : (
                 name.slice(0, 1).toUpperCase()

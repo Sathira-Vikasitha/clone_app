@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -208,10 +209,12 @@ export default function PostDetailPage() {
             <p className="mt-4 whitespace-pre-wrap text-white/90">{post.caption}</p>
 
             {post.imageUrl ? (
-              <img
+              <Image
                 className="mt-4 max-h-[620px] w-full rounded-md object-cover"
                 src={post.imageUrl}
                 alt=""
+                width={1200}
+                height={900}
               />
             ) : null}
 

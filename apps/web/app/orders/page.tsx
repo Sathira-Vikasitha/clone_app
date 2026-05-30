@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -151,7 +152,13 @@ export default function OrdersPage() {
           {orders.map((order) => (
             <article key={order.id} className="rounded-md border border-white/10 bg-white/10 p-4">
               <div className="grid gap-4 md:grid-cols-[180px_1fr]">
-                <img className="aspect-video w-full rounded-md object-cover" src={order.item.imageUrl} alt="" />
+                <Image
+                  className="aspect-video w-full rounded-md object-cover"
+                  src={order.item.imageUrl}
+                  alt=""
+                  width={360}
+                  height={203}
+                />
                 <div>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>

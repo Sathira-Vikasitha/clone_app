@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -241,10 +242,12 @@ export default function MessagesPage() {
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold">
                       {otherUser?.avatarUrl ? (
-                        <img
+                        <Image
                           className="h-full w-full rounded-full object-cover"
                           src={otherUser.avatarUrl}
                           alt=""
+                          width={44}
+                          height={44}
                         />
                       ) : (
                         (otherUser?.name || "C").slice(0, 1).toUpperCase()
@@ -270,10 +273,12 @@ export default function MessagesPage() {
                 {selectedRecipient ? (
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-300 text-lg font-bold text-neutral-950">
                     {selectedRecipient.avatarUrl ? (
-                      <img
+                      <Image
                         className="h-full w-full rounded-full object-cover"
                         src={selectedRecipient.avatarUrl}
                         alt=""
+                        width={48}
+                        height={48}
                       />
                     ) : (
                       selectedRecipient.name.slice(0, 1).toUpperCase()
@@ -311,10 +316,12 @@ export default function MessagesPage() {
                     {!isMine ? (
                       <div className="mb-5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-xs font-bold">
                         {message.sender.avatarUrl ? (
-                          <img
+                          <Image
                             className="h-full w-full rounded-full object-cover"
                             src={message.sender.avatarUrl}
                             alt=""
+                            width={32}
+                            height={32}
                           />
                         ) : (
                           message.sender.name.slice(0, 1).toUpperCase()

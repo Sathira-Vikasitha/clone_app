@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -142,10 +143,12 @@ export default function SearchPage() {
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-teal-300 font-bold text-neutral-950">
                   {user.avatarUrl ? (
-                    <img
+                    <Image
                       className="h-full w-full rounded-full object-cover"
                       src={user.avatarUrl}
                       alt=""
+                      width={56}
+                      height={56}
                     />
                   ) : (
                     user.name.slice(0, 1).toUpperCase()
