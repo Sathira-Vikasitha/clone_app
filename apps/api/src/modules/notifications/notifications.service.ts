@@ -1,4 +1,5 @@
 import { prisma } from "../../db/prisma.js";
+import { sendNotificationEvent } from "./notification.events.js";
 
 export async function createNotification(data: {
   recipientId: string;
@@ -12,7 +13,7 @@ export async function createNotification(data: {
     return null;
   }
 
-  return prisma.notification.create({
+  const notification = await prisma.notification.create({
     data: {
       recipientId: data.recipientId,
       actorId: data.actorId,
@@ -21,7 +22,21 @@ export async function createNotification(data: {
       postId: data.postId || null,
       conversationId: data.conversationId || null,
     },
+    include: {
+      actor: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          avatarUrl: true,
+        },
+      },
+    },
   });
+
+  sendNotificationEvent(data.recipientId, notification);
+
+  return notification;
 }
 
 export async function getNotifications(userId: string) {
@@ -57,4 +72,15 @@ export async function markNotificationsRead(userId: string) {
   });
 
   return { ok: true };
+}
+
+export async function getUnreadNotificationCount(userId: string) {
+  const count = await prisma.notification.count({
+    where: {
+      recipientId: userId,
+      readAt: null,
+    },
+  });
+
+  return { count };
 }

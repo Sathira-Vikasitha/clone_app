@@ -49,7 +49,12 @@ export default function NotificationsPage() {
     });
 
     if (response.ok) {
-      setNotifications(await response.json());
+      const data = (await response.json()) as Notification[];
+      setNotifications(data);
+
+      if (data.some((notification) => !notification.readAt)) {
+        markAllRead();
+      }
     }
   }
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { NotificationsLink } from "@/components/NotificationsLink";
 import { API_URL, apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Conversation, Message, User } from "@/lib/types";
@@ -202,12 +203,7 @@ export default function MessagesPage() {
                 Profile
               </Link>
             ) : null}
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/notifications"
-            >
-              Notifications
-            </Link>
+            <NotificationsLink />
             <Link
               className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
               href="/"

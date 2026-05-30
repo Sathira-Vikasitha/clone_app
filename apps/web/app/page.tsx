@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { NotificationsLink } from "@/components/NotificationsLink";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { Post, User } from "@/lib/types";
@@ -303,12 +304,7 @@ export default function HomePage() {
             InstaClone
           </Link>
           <div className="flex items-center gap-3">
-            <Link
-              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
-              href="/notifications"
-            >
-              Notifications
-            </Link>
+            <NotificationsLink />
             <Link
               className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
               href="/messages"
