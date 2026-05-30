@@ -1,4 +1,5 @@
 import { prisma } from "../../db/prisma.js";
+import { createNotification } from "../notifications/notifications.service.js";
 
 const conversationInclude = {
   members: {
@@ -139,6 +140,18 @@ export async function createMessage(data: {
     where: { id: data.conversationId },
     data: { updatedAt: new Date() },
   });
+
+  for (const member of message.conversation.members) {
+    if (member.userId !== data.senderId) {
+      await createNotification({
+        recipientId: member.userId,
+        actorId: data.senderId,
+        type: "message",
+        message: `${message.sender.name} sent you a message.`,
+        conversationId: data.conversationId,
+      });
+    }
+  }
 
   return message;
 }

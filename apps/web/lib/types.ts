@@ -76,3 +76,16 @@ export type Conversation = {
   }[];
   messages: Message[];
 };
+
+export type Notification = {
+  id: string;
+  recipientId: string;
+  actorId: string;
+  type: "like" | "comment" | "message";
+  message: string;
+  postId: string | null;
+  conversationId: string | null;
+  readAt: string | null;
+  createdAt: string;
+  actor: ChatUser;
+};

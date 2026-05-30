@@ -7,6 +7,7 @@ import postRoutes from "./modules/posts/posts.routes.js";
 import uploadRoutes from "./modules/uploads/uploads.routes.js";
 import userRoutes from "./modules/users/users.routes.js";
 import chatRoutes from "./modules/chats/chats.routes.js";
+import notificationRoutes from "./modules/notifications/notifications.routes.js";
 
 export const app = express();
 
@@ -27,3 +28,4 @@ app.use("/api/posts", postRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/notifications", notificationRoutes);

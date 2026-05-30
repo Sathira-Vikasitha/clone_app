@@ -1,4 +1,5 @@
 import { prisma } from "../../db/prisma.js";
+import { createNotification } from "../notifications/notifications.service.js";
 
 export async function createPost(data: {
   authorId: string;
@@ -44,6 +45,28 @@ export async function togglePostLike(postId: string, userId: string) {
     },
   });
 
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: {
+      authorId: true,
+      author: { select: { name: true } },
+    },
+  });
+  const actor = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { name: true },
+  });
+
+  if (post && actor) {
+    await createNotification({
+      recipientId: post.authorId,
+      actorId: userId,
+      type: "like",
+      message: `${actor.name} liked your post.`,
+      postId,
+    });
+  }
+
   return { liked: true };
 }
 
@@ -52,7 +75,7 @@ export async function addPostComment(data: {
   authorId: string;
   body: string;
 }) {
-  return prisma.postComment.create({
+  const comment = await prisma.postComment.create({
     data,
     include: {
       author: {
@@ -65,6 +88,23 @@ export async function addPostComment(data: {
       },
     },
   });
+
+  const post = await prisma.post.findUnique({
+    where: { id: data.postId },
+    select: { authorId: true },
+  });
+
+  if (post) {
+    await createNotification({
+      recipientId: post.authorId,
+      actorId: data.authorId,
+      type: "comment",
+      message: `${comment.author.name} commented on your post.`,
+      postId: data.postId,
+    });
+  }
+
+  return comment;
 }
 
 export async function deletePostForOwner(postId: string, authorId: string) {
