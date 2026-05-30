@@ -78,6 +78,10 @@ export default function OrdersPage() {
         (total, order) => total + order.item.priceAmount,
         0,
       ),
+      downloads: orders.reduce(
+        (total, order) => total + order.item._count.downloads,
+        0,
+      ),
       currency: orders[0]?.item.currency || "LKR",
     };
   }, [orders]);
@@ -117,7 +121,7 @@ export default function OrdersPage() {
           </p>
         </header>
 
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
           <div className="rounded-md border border-white/10 bg-white/10 p-4">
             <p className="text-sm text-white/55">Total</p>
             <p className="mt-2 text-3xl font-semibold">{summary.total}</p>
@@ -143,6 +147,10 @@ export default function OrdersPage() {
             <p className="mt-2 text-2xl font-semibold">
               {summary.currency} {summary.earnings}
             </p>
+          </div>
+          <div className="rounded-md border border-white/10 bg-white/10 p-4">
+            <p className="text-sm text-white/55">Downloads</p>
+            <p className="mt-2 text-3xl font-semibold">{summary.downloads}</p>
           </div>
         </section>
 
@@ -174,6 +182,7 @@ export default function OrdersPage() {
                   <div className="mt-4 grid gap-2 text-sm text-white/60 sm:grid-cols-2">
                     <p>Payment method: {order.paymentMethod}</p>
                     <p>Status: {getStatusLabel(order.status)}</p>
+                    <p>Downloads: {order.item._count.downloads}</p>
                     <p>Created: {new Date(order.createdAt).toLocaleDateString()}</p>
                     {order.receiptUrl ? (
                       <a className="text-teal-200" href={order.receiptUrl} target="_blank">

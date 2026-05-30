@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
@@ -8,12 +9,23 @@ import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
 import type { StoreItem, StorePurchaseRequest, User } from "@/lib/types";
 
+const STORE_CATEGORIES = [
+  "Nature",
+  "Wallpapers",
+  "Portraits",
+  "Animals",
+  "Travel",
+  "Art",
+  "Other",
+];
+
 export default function StorePage() {
   const router = useRouter();
   const [me, setMe] = useState<User | null>(null);
   const [items, setItems] = useState<StoreItem[]>([]);
   const [sellerRequests, setSellerRequests] = useState<StorePurchaseRequest[]>([]);
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState(STORE_CATEGORIES[0]);
   const [description, setDescription] = useState("");
   const [priceAmount, setPriceAmount] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -22,21 +34,41 @@ export default function StorePage() {
   const [receiptFiles, setReceiptFiles] = useState<Record<string, File | null>>({});
   const [editingItemId, setEditingItemId] = useState("");
   const [editTitle, setEditTitle] = useState("");
+  const [editCategory, setEditCategory] = useState(STORE_CATEGORIES[0]);
   const [editDescription, setEditDescription] = useState("");
   const [editPriceAmount, setEditPriceAmount] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
   const [visibleItemCount, setVisibleItemCount] = useState(4);
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const loadStore = useCallback(async (token = getAccessToken(), query = searchQuery) => {
+  const loadStore = useCallback(async (
+    token = getAccessToken(),
+    query = searchQuery,
+    selectedCategory = categoryFilter,
+  ) => {
     if (!token) {
       return;
     }
 
     const cleanedQuery = query.trim();
+    const cleanedCategory = selectedCategory.trim();
+    const searchParams = new URLSearchParams();
+
+    if (cleanedQuery) {
+      searchParams.set("q", cleanedQuery);
+    }
+
+    if (cleanedCategory) {
+      searchParams.set("category", cleanedCategory);
+    }
+
+    const storePath = searchParams.toString()
+      ? `/store?${searchParams.toString()}`
+      : "/store";
     const [itemsResponse, requestsResponse] = await Promise.all([
-      apiFetch(`/store${cleanedQuery ? `?q=${encodeURIComponent(cleanedQuery)}` : ""}`, {
+      apiFetch(storePath, {
         headers: { Authorization: `Bearer ${token}` },
       }),
       apiFetch("/store/seller/requests", {
@@ -51,7 +83,7 @@ export default function StorePage() {
     if (requestsResponse.ok) {
       setSellerRequests((await requestsResponse.json()) as StorePurchaseRequest[]);
     }
-  }, [searchQuery]);
+  }, [categoryFilter, searchQuery]);
 
   useEffect(() => {
     const token = getAccessToken();
@@ -92,11 +124,11 @@ export default function StorePage() {
     }
 
     const timeoutId = window.setTimeout(() => {
-      loadStore(token, searchQuery);
+      loadStore(token, searchQuery, categoryFilter);
     }, 250);
 
     return () => window.clearTimeout(timeoutId);
-  }, [loadStore, searchQuery]);
+  }, [categoryFilter, loadStore, searchQuery]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -104,7 +136,7 @@ export default function StorePage() {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, [searchQuery]);
+  }, [categoryFilter, searchQuery]);
 
   async function uploadFile(file: File) {
     const token = getAccessToken();
@@ -171,6 +203,7 @@ export default function StorePage() {
       headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         title,
+        category,
         description,
         imageUrl,
         priceAmount: amount,
@@ -186,6 +219,7 @@ export default function StorePage() {
     }
 
     setTitle("");
+    setCategory(STORE_CATEGORIES[0]);
     setDescription("");
     setPriceAmount("");
     setImageUrl("");
@@ -254,6 +288,30 @@ export default function StorePage() {
     loadStore(token);
   }
 
+  async function downloadStoreItem(itemId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const response = await apiFetch(`/store/${itemId}/download`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Download failed.");
+      return;
+    }
+
+    window.open(data.imageUrl, "_blank", "noopener,noreferrer");
+    setMessage(`Download recorded. Total downloads: ${data.downloadCount}.`);
+    loadStore(token);
+  }
+
   async function updateRequest(purchaseId: string, action: "approve" | "reject") {
     const token = getAccessToken();
 
@@ -276,6 +334,7 @@ export default function StorePage() {
   function startEditingItem(item: StoreItem) {
     setEditingItemId(item.id);
     setEditTitle(item.title);
+    setEditCategory(item.category || "Other");
     setEditDescription(item.description || "");
     setEditPriceAmount(String(item.priceAmount));
     setEditImageUrl(item.imageUrl);
@@ -284,6 +343,7 @@ export default function StorePage() {
   function cancelEditingItem() {
     setEditingItemId("");
     setEditTitle("");
+    setEditCategory(STORE_CATEGORIES[0]);
     setEditDescription("");
     setEditPriceAmount("");
     setEditImageUrl("");
@@ -308,6 +368,7 @@ export default function StorePage() {
       headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         title: editTitle,
+        category: editCategory,
         description: editDescription,
         imageUrl: editImageUrl,
         priceAmount: amount,
@@ -381,6 +442,17 @@ export default function StorePage() {
               value={title}
               onChange={(event) => setTitle(event.target.value)}
             />
+            <select
+              className="h-12 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+            >
+              {STORE_CATEGORIES.map((storeCategory) => (
+                <option key={storeCategory} value={storeCategory}>
+                  {storeCategory}
+                </option>
+              ))}
+            </select>
             <input
               className="h-12 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
               placeholder="Price in LKR"
@@ -446,6 +518,18 @@ export default function StorePage() {
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
             />
+            <select
+              className="h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300 sm:max-w-xs"
+              value={categoryFilter}
+              onChange={(event) => setCategoryFilter(event.target.value)}
+            >
+              <option value="">All categories</option>
+              {STORE_CATEGORIES.map((storeCategory) => (
+                <option key={storeCategory} value={storeCategory}>
+                  {storeCategory}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mt-4 grid gap-5 md:grid-cols-2">
             {items.length === 0 ? (
@@ -474,6 +558,17 @@ export default function StorePage() {
                         value={editTitle}
                         onChange={(event) => setEditTitle(event.target.value)}
                       />
+                      <select
+                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        value={editCategory}
+                        onChange={(event) => setEditCategory(event.target.value)}
+                      >
+                        {STORE_CATEGORIES.map((storeCategory) => (
+                          <option key={storeCategory} value={storeCategory}>
+                            {storeCategory}
+                          </option>
+                        ))}
+                      </select>
                       <input
                         className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
                         type="number"
@@ -514,6 +609,12 @@ export default function StorePage() {
                           <p className="mt-1 text-sm text-white/55">
                             by @{item.seller.username}
                           </p>
+                          <p className="mt-2 inline-flex rounded-full border border-teal-300/30 px-3 py-1 text-xs text-teal-200">
+                            {item.category || "Other"}
+                          </p>
+                          <p className="mt-2 text-xs text-white/45">
+                            Downloaded {item.downloadCount} times
+                          </p>
                         </div>
                         <p className="rounded-md bg-white px-3 py-2 text-sm font-bold text-neutral-950">
                           {item.currency} {item.priceAmount}
@@ -526,6 +627,12 @@ export default function StorePage() {
                   )}
 
                   <div className="mt-4 flex flex-col gap-3">
+                    <Link
+                      className="rounded-md border border-teal-300/50 px-4 py-2 text-center text-sm font-semibold text-teal-200"
+                      href={`/store/${item.id}`}
+                    >
+                      View details
+                    </Link>
                     {isMine ? (
                       <div className="flex flex-wrap gap-2">
                         <p className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/70">
@@ -549,14 +656,12 @@ export default function StorePage() {
                         ) : null}
                       </div>
                     ) : item.canDownload ? (
-                      <a
+                      <button
+                        onClick={() => downloadStoreItem(item.id)}
                         className="rounded-md bg-teal-300 px-4 py-2 text-center text-sm font-semibold text-neutral-950"
-                        href={item.imageUrl}
-                        download
-                        target="_blank"
                       >
                         Download image
-                      </a>
+                      </button>
                     ) : (
                       <>
                         <button

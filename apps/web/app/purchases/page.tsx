@@ -88,6 +88,30 @@ export default function PurchasesPage() {
     return status;
   }
 
+  async function downloadPurchase(itemId: string) {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const response = await apiFetch(`/store/${itemId}/download`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Download failed.");
+      return;
+    }
+
+    window.open(data.imageUrl, "_blank", "noopener,noreferrer");
+    setMessage(`Download recorded. Total downloads: ${data.downloadCount}.`);
+    loadPurchases(token);
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
@@ -137,18 +161,19 @@ export default function PurchasesPage() {
                 <p className="text-white/40">
                   Requested: {new Date(purchase.createdAt).toLocaleDateString()}
                 </p>
+                <p className="text-white/40">
+                  Downloads: {purchase.item._count.downloads}
+                </p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {canDownload(purchase.status) ? (
-                  <a
+                  <button
+                    onClick={() => downloadPurchase(purchase.itemId)}
                     className="rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
-                    href={purchase.item.imageUrl}
-                    download
-                    target="_blank"
                   >
                     Download image
-                  </a>
+                  </button>
                 ) : (
                   <Link
                     className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"

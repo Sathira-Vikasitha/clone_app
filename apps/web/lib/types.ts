@@ -125,12 +125,14 @@ export type StoreItem = {
   id: string;
   title: string;
   description: string | null;
+  category: string;
   imageUrl: string;
   priceAmount: number;
   currency: string;
   sellerId: string;
   createdAt: string;
   canDownload: boolean;
+  downloadCount: number;
   purchase: StorePurchaseSummary | null;
   seller: ChatUser;
 };
@@ -151,6 +153,9 @@ export type StorePurchaseRequest = {
     priceAmount: number;
     currency: string;
     sellerId: string;
+    _count: {
+      downloads: number;
+    };
   };
 };
 
@@ -170,6 +175,9 @@ export type StorePurchaseHistory = {
     priceAmount: number;
     currency: string;
     sellerId: string;
+    _count: {
+      downloads: number;
+    };
     seller: ChatUser;
   };
 };

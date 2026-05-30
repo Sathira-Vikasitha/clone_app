@@ -19,12 +19,18 @@ const storeItemInclude = (currentUserId: string) => ({
       createdAt: true,
     },
   },
+  _count: {
+    select: {
+      downloads: true,
+    },
+  },
 });
 
 export async function createStoreItem(data: {
   sellerId: string;
   title: string;
   description?: string;
+  category: string;
   imageUrl: string;
   priceAmount: number;
   currency: string;
@@ -34,6 +40,7 @@ export async function createStoreItem(data: {
       sellerId: data.sellerId,
       title: data.title,
       description: data.description || null,
+      category: data.category,
       imageUrl: data.imageUrl,
       priceAmount: data.priceAmount,
       currency: data.currency,
@@ -42,24 +49,38 @@ export async function createStoreItem(data: {
   });
 }
 
-export async function getStoreItems(userId: string, searchQuery = "") {
+export async function getStoreItems(userId: string, searchQuery = "", category = "") {
   const query = searchQuery.replace(/^#/, "").trim();
+  const cleanedCategory = category.trim();
   const findOptions: Parameters<typeof prisma.storeItem.findMany>[0] = {
     orderBy: { createdAt: "desc" },
     include: storeItemInclude(userId),
   };
 
-  if (query) {
-    findOptions.where = {
-      OR: [
-        { title: { contains: query, mode: "insensitive" } },
-        { description: { contains: query, mode: "insensitive" } },
-        { description: { contains: `#${query}`, mode: "insensitive" } },
-      ],
-    };
+  if (query || cleanedCategory) {
+    findOptions.where = {};
+  }
+
+  if (findOptions.where && cleanedCategory) {
+    findOptions.where.category = cleanedCategory;
+  }
+
+  if (findOptions.where && query) {
+    findOptions.where.OR = [
+      { title: { contains: query, mode: "insensitive" } },
+      { description: { contains: query, mode: "insensitive" } },
+      { description: { contains: `#${query}`, mode: "insensitive" } },
+    ];
   }
 
   return prisma.storeItem.findMany(findOptions);
+}
+
+export async function getStoreItemById(itemId: string, userId: string) {
+  return prisma.storeItem.findUnique({
+    where: { id: itemId },
+    include: storeItemInclude(userId),
+  });
 }
 
 export async function getMyStoreItems(userId: string) {
@@ -75,6 +96,7 @@ export async function updateStoreItemForSeller(data: {
   sellerId: string;
   title: string;
   description?: string;
+  category: string;
   imageUrl: string;
   priceAmount: number;
   currency: string;
@@ -95,6 +117,7 @@ export async function updateStoreItemForSeller(data: {
     data: {
       title: data.title,
       description: data.description || null,
+      category: data.category,
       imageUrl: data.imageUrl,
       priceAmount: data.priceAmount,
       currency: data.currency,
@@ -198,6 +221,11 @@ export async function getMyPurchases(userId: string) {
     include: {
       item: {
         include: {
+          _count: {
+            select: {
+              downloads: true,
+            },
+          },
           seller: {
             select: {
               id: true,
@@ -227,9 +255,64 @@ export async function getSellerPurchaseRequests(sellerId: string) {
           avatarUrl: true,
         },
       },
-      item: true,
+      item: {
+        include: {
+          _count: {
+            select: {
+              downloads: true,
+            },
+          },
+        },
+      },
     },
   });
+}
+
+export async function recordStoreDownload(data: {
+  itemId: string;
+  userId: string;
+}) {
+  const item = await prisma.storeItem.findUnique({
+    where: { id: data.itemId },
+    include: {
+      purchases: {
+        where: { buyerId: data.userId },
+        select: { status: true },
+      },
+    },
+  });
+
+  if (!item) {
+    throw new Error("Store item not found");
+  }
+
+  const purchase = item.purchases[0];
+  const canDownload =
+    item.sellerId === data.userId ||
+    purchase?.status === "approved" ||
+    purchase?.status === "paid";
+
+  if (!canDownload) {
+    throw new Error("Payment approval is required before download");
+  }
+
+  if (item.sellerId !== data.userId) {
+    await prisma.storeDownload.create({
+      data: {
+        itemId: data.itemId,
+        userId: data.userId,
+      },
+    });
+  }
+
+  const downloadCount = await prisma.storeDownload.count({
+    where: { itemId: data.itemId },
+  });
+
+  return {
+    imageUrl: item.imageUrl,
+    downloadCount,
+  };
 }
 
 export async function updatePurchaseStatus(data: {

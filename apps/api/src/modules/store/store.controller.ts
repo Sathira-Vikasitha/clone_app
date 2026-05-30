@@ -7,7 +7,9 @@ import {
   getMyPurchases,
   getMyStoreItems,
   getSellerPurchaseRequests,
+  getStoreItemById,
   getStoreItems,
+  recordStoreDownload,
   submitReceiptPurchase,
   updateStoreItemForSeller,
   updatePurchaseStatus,
@@ -16,6 +18,7 @@ import {
 const storeItemSchema = z.object({
   title: z.string().min(1).max(80),
   description: z.string().max(500).optional().or(z.literal("")),
+  category: z.string().min(1).max(40).default("Other"),
   imageUrl: z.string().url(),
   priceAmount: z.number().int().min(1),
   currency: z.string().min(3).max(5).default("LKR"),
@@ -35,7 +38,9 @@ function mapStoreItem(item: any, currentUserId: string) {
       item.sellerId === currentUserId ||
       purchase?.status === "approved" ||
       purchase?.status === "paid",
+    downloadCount: item._count?.downloads || 0,
     purchases: undefined,
+    _count: undefined,
   };
 }
 
@@ -49,10 +54,12 @@ export async function create(req: Request, res: Response) {
       imageUrl: string;
       priceAmount: number;
       currency: string;
+      category: string;
       description?: string;
     } = {
       sellerId: userId,
       title: body.title,
+      category: body.category,
       imageUrl: body.imageUrl,
       priceAmount: body.priceAmount,
       currency: body.currency.toUpperCase(),
@@ -73,7 +80,8 @@ export async function create(req: Request, res: Response) {
 export async function list(req: Request, res: Response) {
   const userId = (req as any).userId as string;
   const query = typeof req.query.q === "string" ? req.query.q : "";
-  const items = await getStoreItems(userId, query);
+  const category = typeof req.query.category === "string" ? req.query.category : "";
+  const items = await getStoreItems(userId, query, category);
 
   return res.json(items.map((item) => mapStoreItem(item, userId)));
 }
@@ -83,6 +91,23 @@ export async function mine(req: Request, res: Response) {
   const items = await getMyStoreItems(userId);
 
   return res.json(items.map((item) => mapStoreItem(item, userId)));
+}
+
+export async function show(req: Request, res: Response) {
+  const userId = (req as any).userId as string;
+  const itemId = req.params.itemId;
+
+  if (!itemId || Array.isArray(itemId)) {
+    return res.status(400).json({ message: "Store item id is required" });
+  }
+
+  const item = await getStoreItemById(itemId, userId);
+
+  if (!item) {
+    return res.status(404).json({ message: "Store item not found" });
+  }
+
+  return res.json(mapStoreItem(item, userId));
 }
 
 export async function update(req: Request, res: Response) {
@@ -102,11 +127,13 @@ export async function update(req: Request, res: Response) {
       imageUrl: string;
       priceAmount: number;
       currency: string;
+      category: string;
       description?: string;
     } = {
       itemId,
       sellerId: userId,
       title: body.title,
+      category: body.category,
       imageUrl: body.imageUrl,
       priceAmount: body.priceAmount,
       currency: body.currency.toUpperCase(),
@@ -191,6 +218,23 @@ export async function demoCardPurchase(req: Request, res: Response) {
     });
   } catch (error: any) {
     return res.status(400).json({ message: error.message || "Card payment failed" });
+  }
+}
+
+export async function download(req: Request, res: Response) {
+  try {
+    const userId = (req as any).userId as string;
+    const itemId = req.params.itemId;
+
+    if (!itemId || Array.isArray(itemId)) {
+      return res.status(400).json({ message: "Store item id is required" });
+    }
+
+    const downloadData = await recordStoreDownload({ itemId, userId });
+
+    return res.json(downloadData);
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message || "Download failed" });
   }
 }
 

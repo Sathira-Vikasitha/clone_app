@@ -26,6 +26,7 @@ model User {
   triggeredNotifications Notification[] @relation("NotificationActor")
   storeItems   StoreItem[]
   storePurchases StorePurchase[]
+  storeDownloads StoreDownload[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -155,16 +156,32 @@ model StoreItem {
   id          String          @id @default(cuid())
   title       String
   description String?
+  category    String          @default("Other")
   imageUrl    String
   priceAmount Int
   currency    String          @default("LKR")
   sellerId    String
   seller      User            @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   purchases   StorePurchase[]
+  downloads   StoreDownload[]
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
   @@index([sellerId])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model StoreDownload {
+  id        String    @id @default(cuid())
+  itemId    String
+  userId    String
+  item      StoreItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@index([itemId])
+  @@index([userId])
   @@index([createdAt])
 }
 
