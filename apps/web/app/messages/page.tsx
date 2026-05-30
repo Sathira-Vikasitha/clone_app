@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { API_URL, apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
@@ -32,6 +32,48 @@ export default function MessagesPage() {
       ?.user;
   }, [me, selectedConversation]);
 
+  const selectConversation = useCallback(
+    async (conversationId: string, token = getAccessToken()) => {
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      selectedConversationIdRef.current = conversationId;
+      setSelectedConversationId(conversationId);
+      const response = await apiFetch(`/chats/${conversationId}/messages`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        setMessages(await response.json());
+      }
+    },
+    [router],
+  );
+
+  const loadConversations = useCallback(
+    async (token = getAccessToken()) => {
+      if (!token) {
+        return;
+      }
+
+      const response = await apiFetch("/chats", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as Conversation[];
+        setConversations(data);
+
+        if (!selectedConversationIdRef.current && data[0]) {
+          selectConversation(data[0].id, token);
+        }
+      }
+    },
+    [selectConversation],
+  );
+
   useEffect(() => {
     const token = getAccessToken();
 
@@ -56,7 +98,7 @@ export default function MessagesPage() {
         router.push("/login");
       });
 
-    loadConversations(token);
+    void Promise.resolve().then(() => loadConversations(token));
 
     const events = new EventSource(
       `${API_URL}/chats/events?token=${encodeURIComponent(token)}`,
@@ -80,43 +122,7 @@ export default function MessagesPage() {
     });
 
     return () => events.close();
-  }, [router]);
-
-  async function loadConversations(token = getAccessToken()) {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiFetch("/chats", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.ok) {
-      const data = (await response.json()) as Conversation[];
-      setConversations(data);
-
-      if (!selectedConversationId && data[0]) {
-        selectConversation(data[0].id, token);
-      }
-    }
-  }
-
-  async function selectConversation(conversationId: string, token = getAccessToken()) {
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
-    selectedConversationIdRef.current = conversationId;
-    setSelectedConversationId(conversationId);
-    const response = await apiFetch(`/chats/${conversationId}/messages`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.ok) {
-      setMessages(await response.json());
-    }
-  }
+  }, [loadConversations, router]);
 
   async function startConversation(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

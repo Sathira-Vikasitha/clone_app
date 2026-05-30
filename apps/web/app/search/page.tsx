@@ -120,6 +120,7 @@ export default function SearchPage() {
           <input
             className="h-12 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
             placeholder="name or username"
+            suppressHydrationWarning
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />

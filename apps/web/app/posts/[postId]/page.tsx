@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
@@ -20,6 +20,25 @@ export default function PostDetailPage() {
   const [visibleCommentCount, setVisibleCommentCount] = useState(4);
   const [error, setError] = useState("");
   const from = searchParams.get("from");
+
+  const loadPost = useCallback(
+    async (token = getAccessToken()) => {
+      if (!token) {
+        return;
+      }
+
+      const response = await apiFetch(`/posts/${params.postId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        setPost(await response.json());
+      } else {
+        setError("Post not found");
+      }
+    },
+    [params.postId],
+  );
 
   useEffect(() => {
     const token = getAccessToken();
@@ -45,8 +64,8 @@ export default function PostDetailPage() {
         router.push("/login");
       });
 
-    loadPost(token);
-  }, [params.postId, router]);
+    void Promise.resolve().then(() => loadPost(token));
+  }, [loadPost, params.postId, router]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -66,22 +85,6 @@ export default function PostDetailPage() {
     }
 
     return "/";
-  }
-
-  async function loadPost(token = getAccessToken()) {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiFetch(`/posts/${params.postId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.ok) {
-      setPost(await response.json());
-    } else {
-      setError("Post not found");
-    }
   }
 
   async function toggleLike() {

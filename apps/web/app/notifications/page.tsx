@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { apiFetch } from "@/lib/api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth";
@@ -13,6 +13,51 @@ export default function NotificationsPage() {
   const router = useRouter();
   const [me, setMe] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const markAllRead = useCallback(async () => {
+    const token = getAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const response = await apiFetch("/notifications/read", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((notification) => ({
+          ...notification,
+          readAt: notification.readAt || new Date().toISOString(),
+        })),
+      );
+    }
+  }, [router]);
+
+  const loadNotifications = useCallback(
+    async (token = getAccessToken()) => {
+      if (!token) {
+        return;
+      }
+
+      const response = await apiFetch("/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as Notification[];
+        setNotifications(data);
+
+        if (data.some((notification) => !notification.readAt)) {
+          markAllRead();
+        }
+      }
+    },
+    [markAllRead],
+  );
 
   useEffect(() => {
     const token = getAccessToken();
@@ -38,50 +83,8 @@ export default function NotificationsPage() {
         router.push("/login");
       });
 
-    loadNotifications(token);
-  }, [router]);
-
-  async function loadNotifications(token = getAccessToken()) {
-    if (!token) {
-      return;
-    }
-
-    const response = await apiFetch("/notifications", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.ok) {
-      const data = (await response.json()) as Notification[];
-      setNotifications(data);
-
-      if (data.some((notification) => !notification.readAt)) {
-        markAllRead();
-      }
-    }
-  }
-
-  async function markAllRead() {
-    const token = getAccessToken();
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
-    const response = await apiFetch("/notifications/read", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.ok) {
-      setNotifications((currentNotifications) =>
-        currentNotifications.map((notification) => ({
-          ...notification,
-          readAt: notification.readAt || new Date().toISOString(),
-        })),
-      );
-    }
-  }
+    void Promise.resolve().then(() => loadNotifications(token));
+  }, [loadNotifications, router]);
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
