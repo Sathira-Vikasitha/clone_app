@@ -136,6 +136,12 @@ export default function ProfilePage() {
             >
               Purchases
             </Link>
+            <Link
+              className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+              href="/orders"
+            >
+              Orders
+            </Link>
             {me?.username === profile?.username ? (
               <Link
                 className="rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
