@@ -413,37 +413,37 @@ export default function StorePage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-white/10 bg-white/10 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Marketplace
           </p>
           <h1 className="mt-2 text-4xl font-semibold">Store</h1>
-          <p className="mt-3 text-white/60">
+          <p className="mt-3 text-[#94A3B8]">
             Sell downloadable images. Buyers can pay by receipt approval or demo card payment.
           </p>
         </header>
 
         {message ? (
-          <p className="rounded-md border border-teal-300/30 bg-teal-300/10 p-3 text-sm text-teal-100">
+          <p className="rounded-md border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 p-3 text-sm text-[#BDF7EF]">
             {message}
           </p>
         ) : null}
 
-        <form onSubmit={createItem} className="rounded-md border border-white/10 bg-white/10 p-5">
+        <form onSubmit={createItem} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5">
           <h2 className="text-2xl font-semibold">Add image to store</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <input
-              className="h-12 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+              className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
               placeholder="Image title"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
             />
             <select
-              className="h-12 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+              className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
             >
@@ -454,7 +454,7 @@ export default function StorePage() {
               ))}
             </select>
             <input
-              className="h-12 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+              className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
               placeholder="Price in LKR"
               type="number"
               min="1"
@@ -463,20 +463,20 @@ export default function StorePage() {
             />
           </div>
           <textarea
-            className="mt-3 min-h-24 w-full resize-none rounded-md border border-white/15 bg-neutral-900 px-4 py-3 outline-none focus:border-teal-300"
+            className="mt-3 min-h-24 w-full resize-none rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 py-3 outline-none focus:border-[#2DD4BF]"
             placeholder="Description with hashtags, example: Edited nature image #nature #wallpaper"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
           <input
-            className="mt-3 h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+            className="mt-3 h-12 w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Uploaded image URL"
             value={imageUrl}
             onChange={(event) => setImageUrl(event.target.value)}
           />
           <div className="mt-3 flex flex-col gap-3 sm:flex-row">
             <input
-              className="min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-4 py-3 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
+              className="min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 py-3 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
               type="file"
               accept="image/*"
               onChange={(event) => setSelectedImage(event.target.files?.[0] || null)}
@@ -485,7 +485,7 @@ export default function StorePage() {
               type="button"
               onClick={uploadStoreImage}
               disabled={isUploading}
-              className="rounded-md border border-teal-300/60 px-4 py-2 text-sm font-semibold text-teal-200"
+              className="rounded-md border border-[#2DD4BF]/60 px-4 py-2 text-sm font-semibold text-[#7DEADF]"
             >
               {isUploading ? "Uploading..." : "Upload image"}
             </button>
@@ -499,7 +499,7 @@ export default function StorePage() {
               height={800}
             />
           ) : null}
-          <button className="mt-4 rounded-md bg-teal-300 px-5 py-3 font-semibold text-neutral-950">
+          <button className="mt-4 rounded-md bg-[#2DD4BF] px-5 py-3 font-semibold text-neutral-950">
             Publish to store
           </button>
         </form>
@@ -508,18 +508,18 @@ export default function StorePage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-2xl font-semibold">Explore store</h2>
-              <p className="mt-1 text-sm text-white/55">
+              <p className="mt-1 text-sm text-[#94A3B8]/90">
                 Search by title, description, or hashtags like #nature.
               </p>
             </div>
             <input
-              className="h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300 sm:max-w-xs"
+              className="h-12 w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF] sm:max-w-xs"
               placeholder="Search #nature or wallpaper"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
             />
             <select
-              className="h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300 sm:max-w-xs"
+              className="h-12 w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF] sm:max-w-xs"
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value)}
             >
@@ -533,7 +533,7 @@ export default function StorePage() {
           </div>
           <div className="mt-4 grid gap-5 md:grid-cols-2">
             {items.length === 0 ? (
-              <p className="rounded-md border border-white/10 bg-white/10 p-4 text-sm text-white/60 md:col-span-2">
+              <p className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 text-sm text-[#94A3B8] md:col-span-2">
                 No store images found.
               </p>
             ) : null}
@@ -543,7 +543,7 @@ export default function StorePage() {
               const isEditing = editingItemId === item.id;
 
               return (
-                <article key={item.id} className="rounded-md border border-white/10 bg-white/10 p-4">
+                <article key={item.id} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
                   <Image
                     className="aspect-video w-full rounded-md object-cover"
                     src={item.imageUrl}
@@ -554,12 +554,12 @@ export default function StorePage() {
                   {isEditing ? (
                     <div className="mt-4 flex flex-col gap-3">
                       <input
-                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        className="h-11 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                         value={editTitle}
                         onChange={(event) => setEditTitle(event.target.value)}
                       />
                       <select
-                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        className="h-11 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                         value={editCategory}
                         onChange={(event) => setEditCategory(event.target.value)}
                       >
@@ -570,32 +570,32 @@ export default function StorePage() {
                         ))}
                       </select>
                       <input
-                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        className="h-11 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                         type="number"
                         min="1"
                         value={editPriceAmount}
                         onChange={(event) => setEditPriceAmount(event.target.value)}
                       />
                       <textarea
-                        className="min-h-24 resize-none rounded-md border border-white/15 bg-neutral-900 px-3 py-2 outline-none focus:border-teal-300"
+                        className="min-h-24 resize-none rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 py-2 outline-none focus:border-[#2DD4BF]"
                         value={editDescription}
                         onChange={(event) => setEditDescription(event.target.value)}
                       />
                       <input
-                        className="h-11 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                        className="h-11 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                         value={editImageUrl}
                         onChange={(event) => setEditImageUrl(event.target.value)}
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => saveStoreItemEdit(item.id)}
-                          className="rounded-md bg-teal-300 px-3 py-2 text-sm font-semibold text-neutral-950"
+                          className="rounded-md bg-[#2DD4BF] px-3 py-2 text-sm font-semibold text-neutral-950"
                         >
                           Save changes
                         </button>
                         <button
                           onClick={cancelEditingItem}
-                          className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                          className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                         >
                           Cancel
                         </button>
@@ -606,13 +606,13 @@ export default function StorePage() {
                       <div className="mt-4 flex items-start justify-between gap-3">
                         <div>
                           <h3 className="text-xl font-semibold">{item.title}</h3>
-                          <p className="mt-1 text-sm text-white/55">
+                          <p className="mt-1 text-sm text-[#94A3B8]/90">
                             by @{item.seller.username}
                           </p>
-                          <p className="mt-2 inline-flex rounded-full border border-teal-300/30 px-3 py-1 text-xs text-teal-200">
+                          <p className="mt-2 inline-flex rounded-full border border-[#2DD4BF]/30 px-3 py-1 text-xs text-[#7DEADF]">
                             {item.category || "Other"}
                           </p>
-                          <p className="mt-2 text-xs text-white/45">
+                          <p className="mt-2 text-xs text-[#94A3B8]/75">
                             Downloaded {item.downloadCount} times
                           </p>
                         </div>
@@ -621,34 +621,34 @@ export default function StorePage() {
                         </p>
                       </div>
                       {item.description ? (
-                        <p className="mt-3 text-sm text-white/70">{item.description}</p>
+                        <p className="mt-3 text-sm text-[#B8C7C2]">{item.description}</p>
                       ) : null}
                     </>
                   )}
 
                   <div className="mt-4 flex flex-col gap-3">
                     <Link
-                      className="rounded-md border border-teal-300/50 px-4 py-2 text-center text-sm font-semibold text-teal-200"
+                      className="rounded-md border border-[#2DD4BF]/50 px-4 py-2 text-center text-sm font-semibold text-[#7DEADF]"
                       href={`/store/${item.id}`}
                     >
                       View details
                     </Link>
                     {isMine ? (
                       <div className="flex flex-wrap gap-2">
-                        <p className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/70">
+                        <p className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#B8C7C2]">
                           This is your store item.
                         </p>
                         {!isEditing ? (
                           <>
                             <button
                               onClick={() => startEditingItem(item)}
-                              className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                              className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                             >
                               Edit
                             </button>
                             <button
                               onClick={() => deleteStoreItem(item.id)}
-                              className="rounded-md border border-red-300/40 px-3 py-2 text-sm text-red-200"
+                              className="rounded-md border border-[#F87171]/40 px-3 py-2 text-sm text-[#FDA4A4]"
                             >
                               Delete
                             </button>
@@ -658,7 +658,7 @@ export default function StorePage() {
                     ) : item.canDownload ? (
                       <button
                         onClick={() => downloadStoreItem(item.id)}
-                        className="rounded-md bg-teal-300 px-4 py-2 text-center text-sm font-semibold text-neutral-950"
+                        className="rounded-md bg-[#2DD4BF] px-4 py-2 text-center text-sm font-semibold text-neutral-950"
                       >
                         Download image
                       </button>
@@ -666,14 +666,14 @@ export default function StorePage() {
                       <>
                         <button
                           onClick={() => payByDemoCard(item.id)}
-                          className="rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
+                          className="rounded-md bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-neutral-950"
                         >
                           Demo card payment
                         </button>
-                        <div className="rounded-md border border-white/10 bg-neutral-900 p-3">
+                        <div className="rounded-md border border-[#2DD4BF]/15 bg-[#10201D] p-3">
                           <p className="text-sm font-semibold">Pay manually and attach receipt</p>
                           <input
-                            className="mt-3 w-full rounded-md border border-white/15 bg-neutral-950 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
+                            className="mt-3 w-full rounded-md border border-[#2DD4BF]/25 bg-[#071311] px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
                             type="file"
                             accept="image/*"
                             onChange={(event) =>
@@ -685,7 +685,7 @@ export default function StorePage() {
                           />
                           <button
                             onClick={() => submitReceipt(item.id)}
-                            className="mt-3 rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                            className="mt-3 rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                           >
                             Submit receipt
                           </button>
@@ -694,7 +694,7 @@ export default function StorePage() {
                     )}
 
                     {purchaseStatus ? (
-                      <p className="text-sm text-white/55">Payment status: {purchaseStatus}</p>
+                      <p className="text-sm text-[#94A3B8]/90">Payment status: {purchaseStatus}</p>
                     ) : null}
                   </div>
                 </article>
@@ -704,34 +704,34 @@ export default function StorePage() {
           {items.length > visibleItemCount ? (
             <button
               onClick={() => setVisibleItemCount((currentCount) => currentCount + 4)}
-              className="mt-5 rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/10"
+              className="mt-5 rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm font-medium text-[#DDEDE9] hover:bg-[#162B27]/80"
             >
               See more store images
             </button>
           ) : null}
         </section>
 
-        <section className="rounded-md border border-white/10 bg-white/10 p-5">
+        <section className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5">
           <h2 className="text-2xl font-semibold">Buyer requests for your store items</h2>
           <div className="mt-4 flex flex-col gap-3">
             {sellerRequests.length === 0 ? (
-              <p className="text-sm text-white/60">No buyer requests yet.</p>
+              <p className="text-sm text-[#94A3B8]">No buyer requests yet.</p>
             ) : null}
             {sellerRequests.map((request) => (
-              <article key={request.id} className="rounded-md bg-neutral-900 p-4">
+              <article key={request.id} className="rounded-md bg-[#10201D] p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="font-semibold">{request.item.title}</p>
-                    <p className="text-sm text-white/60">
+                    <p className="text-sm text-[#94A3B8]">
                       @{request.buyer.username} paid with {request.paymentMethod}. Status: {request.status}
                     </p>
                   </div>
-                  <p className="text-sm font-semibold text-teal-200">
+                  <p className="text-sm font-semibold text-[#7DEADF]">
                     {request.item.currency} {request.item.priceAmount}
                   </p>
                 </div>
                 {request.receiptUrl ? (
-                  <a className="mt-3 inline-flex text-sm text-teal-200" href={request.receiptUrl} target="_blank">
+                  <a className="mt-3 inline-flex text-sm text-[#7DEADF]" href={request.receiptUrl} target="_blank">
                     View receipt
                   </a>
                 ) : null}
@@ -739,13 +739,13 @@ export default function StorePage() {
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => updateRequest(request.id, "approve")}
-                      className="rounded-md bg-teal-300 px-3 py-2 text-sm font-semibold text-neutral-950"
+                      className="rounded-md bg-[#2DD4BF] px-3 py-2 text-sm font-semibold text-neutral-950"
                     >
                       Approve
                     </button>
                     <button
                       onClick={() => updateRequest(request.id, "reject")}
-                      className="rounded-md border border-red-300/40 px-3 py-2 text-sm text-red-200"
+                      className="rounded-md border border-[#F87171]/40 px-3 py-2 text-sm text-[#FDA4A4]"
                     >
                       Reject
                     </button>

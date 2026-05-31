@@ -97,22 +97,22 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-white/10 bg-white/10 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Moderation
           </p>
           <h1 className="mt-2 text-4xl font-semibold">Admin dashboard</h1>
-          <p className="mt-3 text-white/60">
+          <p className="mt-3 text-[#94A3B8]">
             Review app health and remove unsafe store items when needed.
           </p>
         </header>
 
         {message ? (
-          <p className="rounded-md border border-white/10 bg-white/10 p-4 text-sm text-white/70">
+          <p className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 text-sm text-[#B8C7C2]">
             {message}
           </p>
         ) : null}
@@ -121,8 +121,8 @@ export default function AdminPage() {
           <>
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
               {Object.entries(dashboard.stats).map(([label, value]) => (
-                <div key={label} className="rounded-md border border-white/10 bg-white/10 p-4">
-                  <p className="text-sm capitalize text-white/55">
+                <div key={label} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+                  <p className="text-sm capitalize text-[#94A3B8]/90">
                     {label.replace(/([A-Z])/g, " $1")}
                   </p>
                   <p className="mt-2 text-3xl font-semibold">{value}</p>
@@ -136,7 +136,7 @@ export default function AdminPage() {
                 {dashboard.latestStoreItems.map((item) => (
                   <article
                     key={item.id}
-                    className="rounded-md border border-white/10 bg-white/10 p-4"
+                    className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4"
                   >
                     <Image
                       className="aspect-video w-full rounded-md object-cover"
@@ -148,7 +148,7 @@ export default function AdminPage() {
                     <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <h3 className="text-xl font-semibold">{item.title}</h3>
-                        <p className="mt-1 text-sm text-white/55">
+                        <p className="mt-1 text-sm text-[#94A3B8]/90">
                           @{item.seller.username} | {item.category}
                         </p>
                       </div>
@@ -157,23 +157,23 @@ export default function AdminPage() {
                       </p>
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2 text-sm">
-                      <p className="rounded-md border border-white/15 px-3 py-2 text-white/65">
+                      <p className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-[#B8C7C2]">
                         Purchases: {item._count.purchases}
                       </p>
-                      <p className="rounded-md border border-white/15 px-3 py-2 text-white/65">
+                      <p className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-[#B8C7C2]">
                         Downloads: {item._count.downloads}
                       </p>
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Link
-                        className="rounded-md border border-teal-300/50 px-4 py-2 text-sm font-semibold text-teal-200"
+                        className="rounded-md border border-[#2DD4BF]/50 px-4 py-2 text-sm font-semibold text-[#7DEADF]"
                         href={`/store/${item.id}`}
                       >
                         View item
                       </Link>
                       <button
                         onClick={() => deleteStoreItem(item.id)}
-                        className="rounded-md border border-red-300/50 px-4 py-2 text-sm font-semibold text-red-200"
+                        className="rounded-md border border-[#F87171]/50 px-4 py-2 text-sm font-semibold text-[#FDA4A4]"
                       >
                         Admin delete
                       </button>

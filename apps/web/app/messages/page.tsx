@@ -194,35 +194,35 @@ export default function MessagesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <AppNav user={me} />
 
         <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-          <aside className="rounded-md border border-white/10 bg-white/10 p-4">
+          <aside className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
             {me ? (
-              <div className="mb-4 rounded-md border border-white/10 bg-neutral-900 p-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-teal-300">
+              <div className="mb-4 rounded-md border border-[#2DD4BF]/15 bg-[#10201D] p-3">
+                <p className="text-xs uppercase tracking-[0.18em] text-[#2DD4BF]">
                   Logged in as
                 </p>
                 <p className="mt-1 font-semibold">{me.name}</p>
-                <p className="text-sm text-white/55">@{me.username}</p>
+                <p className="text-sm text-[#94A3B8]/90">@{me.username}</p>
               </div>
             ) : null}
 
             <form onSubmit={startConversation} className="flex gap-2">
               <input
-                className="h-11 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                className="h-11 min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                 placeholder="Username"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
-              <button className="h-11 rounded-md bg-teal-300 px-4 font-semibold text-neutral-950">
+              <button className="h-11 rounded-md bg-[#2DD4BF] px-4 font-semibold text-neutral-950">
                 Chat
               </button>
             </form>
 
-            {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+            {error ? <p className="mt-3 text-sm text-[#F87171]">{error}</p> : null}
 
             <div className="mt-5 flex flex-col gap-2">
               {conversations.map((conversation) => {
@@ -242,8 +242,8 @@ export default function MessagesPage() {
                     onClick={() => selectConversation(conversation.id)}
                     className={`flex items-center gap-3 rounded-md p-3 text-left ${
                       selectedConversationId === conversation.id
-                        ? "bg-teal-300 text-neutral-950"
-                        : "bg-neutral-900 text-white"
+                        ? "bg-[#2DD4BF] text-neutral-950"
+                        : "bg-[#10201D] text-white"
                     }`}
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold">
@@ -273,11 +273,11 @@ export default function MessagesPage() {
             </div>
           </aside>
 
-          <section className="flex min-h-[620px] flex-col rounded-md border border-white/10 bg-white/10">
-            <header className="border-b border-white/10 p-4">
+          <section className="flex min-h-[620px] flex-col rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80">
+            <header className="border-b border-[#2DD4BF]/15 p-4">
               <div className="flex items-center gap-3">
                 {selectedRecipient ? (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-300 text-lg font-bold text-neutral-950">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#2DD4BF] text-lg font-bold text-neutral-950">
                     {selectedRecipient.avatarUrl ? (
                       <Image
                         className="h-full w-full rounded-full object-cover"
@@ -296,11 +296,11 @@ export default function MessagesPage() {
                     {selectedRecipient ? selectedRecipient.name : "Messages"}
                   </h1>
                   {selectedRecipient ? (
-                    <p className="text-sm text-white/55">
+                    <p className="text-sm text-[#94A3B8]/90">
                       @{selectedRecipient.username}
                     </p>
                   ) : (
-                    <p className="text-sm text-white/55">
+                    <p className="text-sm text-[#94A3B8]/90">
                       Start a chat by entering a username.
                     </p>
                   )}
@@ -336,7 +336,7 @@ export default function MessagesPage() {
                     ) : null}
                     <div className={isMine ? "items-end" : "items-start"}>
                       <p
-                        className={`mb-1 text-xs text-white/45 ${
+                        className={`mb-1 text-xs text-[#94A3B8]/75 ${
                           isMine ? "text-right" : "text-left"
                         }`}
                       >
@@ -345,8 +345,8 @@ export default function MessagesPage() {
                       <div
                         className={`w-fit max-w-[min(520px,72vw)] rounded-2xl px-4 py-3 shadow-sm ${
                           isMine
-                            ? "rounded-br-md bg-teal-300 text-neutral-950"
-                            : "rounded-bl-md bg-neutral-900 text-white"
+                            ? "rounded-br-md bg-[#2DD4BF] text-neutral-950"
+                            : "rounded-bl-md bg-[#10201D] text-white"
                         }`}
                       >
                         <p className="whitespace-pre-wrap break-words">
@@ -365,16 +365,16 @@ export default function MessagesPage() {
               })}
             </div>
 
-            <form onSubmit={sendMessage} className="flex gap-2 border-t border-white/10 p-4">
+            <form onSubmit={sendMessage} className="flex gap-2 border-t border-[#2DD4BF]/15 p-4">
               <input
-                className="h-12 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+                className="h-12 min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
                 placeholder="Write a message..."
                 value={body}
                 onChange={(event) => setBody(event.target.value)}
                 disabled={!selectedConversationId}
               />
               <button
-                className="h-12 rounded-md bg-teal-300 px-5 font-semibold text-neutral-950 disabled:opacity-40"
+                className="h-12 rounded-md bg-[#2DD4BF] px-5 font-semibold text-neutral-950 disabled:opacity-40"
                 disabled={!selectedConversationId}
               >
                 Send

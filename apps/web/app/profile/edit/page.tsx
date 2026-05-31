@@ -119,11 +119,11 @@ export default function EditProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <AppNav user={user} />
         <Link
-          className="w-fit rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+          className="w-fit rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm text-[#DDEDE9]"
           href={user ? `/profile/${user.username}` : "/"}
         >
           Back to profile
@@ -131,15 +131,15 @@ export default function EditProfilePage() {
 
         <form
           onSubmit={saveProfile}
-          className="rounded-md border border-white/10 bg-white/10 p-6"
+          className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6"
         >
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Profile
           </p>
           <h1 className="mt-3 text-4xl font-semibold">Edit your profile</h1>
 
           <div className="mt-6 flex items-center gap-4">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-teal-300 text-3xl font-bold text-neutral-950">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#2DD4BF] text-3xl font-bold text-neutral-950">
               {avatarUrl ? (
                 <Image
                   className="h-full w-full rounded-full object-cover"
@@ -154,7 +154,7 @@ export default function EditProfilePage() {
             </div>
             <div className="min-w-0 flex-1">
               <input
-                className="w-full rounded-md border border-white/15 bg-neutral-900 px-4 py-3 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
+                className="w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 py-3 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-2 file:font-medium file:text-neutral-950"
                 type="file"
                 accept="image/*"
                 onChange={(event) =>
@@ -162,7 +162,7 @@ export default function EditProfilePage() {
                 }
               />
               <button
-                className="mt-3 rounded-md border border-teal-300/60 px-4 py-2 text-sm font-semibold text-teal-200"
+                className="mt-3 rounded-md border border-[#2DD4BF]/60 px-4 py-2 text-sm font-semibold text-[#7DEADF]"
                 type="button"
                 onClick={uploadAvatar}
                 disabled={isUploading}
@@ -172,32 +172,32 @@ export default function EditProfilePage() {
             </div>
           </div>
 
-          <label className="mt-6 block text-sm text-white/65">Name</label>
+          <label className="mt-6 block text-sm text-[#B8C7C2]">Name</label>
           <input
-            className="mt-2 h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+            className="mt-2 h-12 w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
 
-          <label className="mt-4 block text-sm text-white/65">Bio</label>
+          <label className="mt-4 block text-sm text-[#B8C7C2]">Bio</label>
           <textarea
-            className="mt-2 min-h-28 w-full resize-none rounded-md border border-white/15 bg-neutral-900 px-4 py-3 outline-none focus:border-teal-300"
+            className="mt-2 min-h-28 w-full resize-none rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 py-3 outline-none focus:border-[#2DD4BF]"
             value={bio}
             onChange={(event) => setBio(event.target.value)}
             placeholder="Write a short bio..."
           />
 
-          <label className="mt-4 block text-sm text-white/65">Avatar URL</label>
+          <label className="mt-4 block text-sm text-[#B8C7C2]">Avatar URL</label>
           <input
-            className="mt-2 h-12 w-full rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+            className="mt-2 h-12 w-full rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
             value={avatarUrl}
             onChange={(event) => setAvatarUrl(event.target.value)}
             placeholder="Optional avatar URL"
           />
 
-          {message ? <p className="mt-4 text-sm text-red-300">{message}</p> : null}
+          {message ? <p className="mt-4 text-sm text-[#F87171]">{message}</p> : null}
 
-          <button className="mt-6 h-12 rounded-md bg-teal-300 px-5 font-semibold text-neutral-950">
+          <button className="mt-6 h-12 rounded-md bg-[#2DD4BF] px-5 font-semibold text-neutral-950">
             Save profile
           </button>
         </form>

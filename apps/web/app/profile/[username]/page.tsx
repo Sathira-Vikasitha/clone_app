@@ -103,13 +103,13 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AppNav user={me} />
 
         {me?.username === profile?.username ? (
           <Link
-            className="w-fit rounded-md border border-teal-300/50 px-4 py-2 text-sm text-teal-200"
+            className="w-fit rounded-md border border-[#2DD4BF]/50 px-4 py-2 text-sm text-[#7DEADF]"
             href="/profile/edit"
           >
             Edit profile
@@ -117,16 +117,16 @@ export default function ProfilePage() {
         ) : null}
 
         {error ? (
-          <p className="rounded-md border border-red-300/30 bg-red-300/10 p-4 text-red-200">
+          <p className="rounded-md border border-[#F87171]/30 bg-[#F87171]/10 p-4 text-[#FDA4A4]">
             {error}
           </p>
         ) : null}
 
         {profile ? (
           <>
-            <header className="rounded-md border border-white/10 bg-white/10 p-6">
+            <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-teal-300 text-3xl font-bold text-neutral-950">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#2DD4BF] text-3xl font-bold text-neutral-950">
                   {profile.avatarUrl ? (
                     <Image
                       className="h-full w-full rounded-full object-cover"
@@ -141,17 +141,17 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <h1 className="text-4xl font-semibold">{profile.name}</h1>
-                  <p className="mt-2 text-white/60">@{profile.username}</p>
-                  <p className="mt-4 text-white/80">
+                  <p className="mt-2 text-[#94A3B8]">@{profile.username}</p>
+                  <p className="mt-4 text-[#DDEDE9]">
                     {profile.bio || "No bio yet."}
                   </p>
-                  <p className="mt-4 text-sm text-teal-200">
+                  <p className="mt-4 text-sm text-[#7DEADF]">
                     {profile._count.posts} posts
                   </p>
                   {me?.username !== profile.username ? (
                     <button
                       onClick={startChatWithProfile}
-                      className="mt-5 rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
+                      className="mt-5 rounded-md bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-neutral-950"
                     >
                       Message
                     </button>
@@ -164,7 +164,7 @@ export default function ProfilePage() {
               {profile.posts.map((post) => (
                 <article
                   key={post.id}
-                  className="rounded-md border border-white/10 bg-white/10 p-4"
+                  className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4"
                 >
                   {post.imageUrl ? (
                     <Image
@@ -175,16 +175,16 @@ export default function ProfilePage() {
                       height={600}
                     />
                   ) : null}
-                  <p className="mt-4 whitespace-pre-wrap text-white/90">
+                  <p className="mt-4 whitespace-pre-wrap text-[#F8FAFC]/90">
                     {post.caption}
                   </p>
-                  <div className="mt-4 flex gap-4 text-sm text-white/55">
+                  <div className="mt-4 flex gap-4 text-sm text-[#94A3B8]/90">
                     <span>{post._count.likes} likes</span>
                     <span>{post._count.comments} comments</span>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
-                      className="inline-flex rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                      className="inline-flex rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                       href={`/posts/${post.id}?from=profile`}
                     >
                       View post
@@ -195,7 +195,7 @@ export default function ProfilePage() {
                         className={`rounded-md px-3 py-2 text-sm font-medium ${
                           post.savedByMe
                             ? "bg-white text-neutral-950"
-                            : "border border-white/15 text-white/80"
+                            : "border border-[#2DD4BF]/25 text-[#DDEDE9]"
                         }`}
                       >
                         {post.savedByMe ? "Saved" : "Save"}
@@ -207,7 +207,7 @@ export default function ProfilePage() {
             </section>
           </>
         ) : (
-          <p className="text-white/60">Loading profile...</p>
+          <p className="text-[#94A3B8]">Loading profile...</p>
         )}
       </section>
     </main>

@@ -102,23 +102,23 @@ export default function SearchPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-white/10 bg-white/10 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Discover
           </p>
           <h1 className="mt-2 text-4xl font-semibold">Search users</h1>
-          <p className="mt-3 text-white/60">
+          <p className="mt-3 text-[#94A3B8]">
             Search by name or username. Email is never used for search.
           </p>
         </header>
 
         <div className="flex gap-3">
           <input
-            className="h-12 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-4 outline-none focus:border-teal-300"
+            className="h-12 min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="name or username"
             suppressHydrationWarning
             value={query}
@@ -127,22 +127,22 @@ export default function SearchPage() {
         </div>
 
         {isSearching ? (
-          <p className="text-sm text-teal-200">Searching...</p>
+          <p className="text-sm text-[#7DEADF]">Searching...</p>
         ) : message ? (
-          <p className="text-sm text-white/60">{message}</p>
+          <p className="text-sm text-[#94A3B8]">{message}</p>
         ) : null}
 
         <section className="flex flex-col gap-3">
           {users.map((user) => (
             <article
               key={user.id}
-              className="flex items-center gap-4 rounded-md border border-white/10 bg-white/10 p-4 hover:border-teal-300/50"
+              className="flex items-center gap-4 rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 hover:border-[#2DD4BF]/50"
             >
               <Link
                 className="flex min-w-0 flex-1 items-center gap-4"
                 href={`/profile/${user.username}`}
               >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-teal-300 font-bold text-neutral-950">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF] font-bold text-neutral-950">
                   {user.avatarUrl ? (
                     <Image
                       className="h-full w-full rounded-full object-cover"
@@ -157,16 +157,16 @@ export default function SearchPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold">{user.name}</p>
-                  <p className="text-sm text-white/55">@{user.username}</p>
-                  <p className="mt-1 truncate text-sm text-white/65">
+                  <p className="text-sm text-[#94A3B8]/90">@{user.username}</p>
+                  <p className="mt-1 truncate text-sm text-[#B8C7C2]">
                     {user.bio || "No bio yet."}
                   </p>
                 </div>
               </Link>
-              <p className="text-sm text-white/45">{user._count.posts} posts</p>
+              <p className="text-sm text-[#94A3B8]/75">{user._count.posts} posts</p>
               <button
                 onClick={() => startChatWithUsername(user.username)}
-                className="rounded-md bg-teal-300 px-4 py-2 text-sm font-semibold text-neutral-950"
+                className="rounded-md bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-neutral-950"
               >
                 Message
               </button>

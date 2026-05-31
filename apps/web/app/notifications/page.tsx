@@ -87,20 +87,20 @@ export default function NotificationsPage() {
   }, [loadNotifications, router]);
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="flex items-center justify-between rounded-md border border-white/10 bg-white/10 p-6">
+        <header className="flex items-center justify-between rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+            <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
               Activity
             </p>
             <h1 className="mt-2 text-4xl font-semibold">Notifications</h1>
           </div>
           <button
             onClick={markAllRead}
-            className="rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+            className="rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm text-[#DDEDE9]"
           >
             Mark read
           </button>
@@ -108,7 +108,7 @@ export default function NotificationsPage() {
 
         <section className="flex flex-col gap-3">
           {notifications.length === 0 ? (
-            <p className="rounded-md border border-white/10 bg-white/10 p-5 text-white/60">
+            <p className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5 text-[#94A3B8]">
               No notifications yet.
             </p>
           ) : null}
@@ -118,11 +118,11 @@ export default function NotificationsPage() {
               key={notification.id}
               className={`flex items-center gap-4 rounded-md border p-4 ${
                 notification.readAt
-                  ? "border-white/10 bg-white/5"
-                  : "border-teal-300/40 bg-teal-300/10"
+                  ? "border-[#2DD4BF]/15 bg-[#10201D]/70"
+                  : "border-[#2DD4BF]/40 bg-[#2DD4BF]/10"
               }`}
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-teal-300 font-bold text-neutral-950">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF] font-bold text-neutral-950">
                 {notification.actor.avatarUrl ? (
                   <Image
                     className="h-full w-full rounded-full object-cover"
@@ -143,14 +143,14 @@ export default function NotificationsPage() {
               </div>
               {notification.type === "message" ? (
                 <Link
-                  className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                  className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                   href="/messages"
                 >
                   Open
                 </Link>
               ) : notification.postId ? (
                 <Link
-                  className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80"
+                  className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9]"
                   href={`/posts/${notification.postId}`}
                 >
                   Open

@@ -34,10 +34,10 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-10 text-white">
       <section className="mx-auto flex w-full max-w-md flex-col gap-8">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Welcome back
           </p>
           <h1 className="mt-3 text-4xl font-semibold">Login to continue</h1>
@@ -45,7 +45,7 @@ export default function LoginPage() {
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Email"
             type="email"
             value={form.email}
@@ -54,7 +54,7 @@ export default function LoginPage() {
             }
           />
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Password"
             type="password"
             value={form.password}
@@ -62,15 +62,15 @@ export default function LoginPage() {
               setForm({ ...form, password: event.target.value })
             }
           />
-          {error ? <p className="text-sm text-red-300">{error}</p> : null}
-          <button className="h-12 rounded-md bg-teal-300 font-semibold text-neutral-950">
+          {error ? <p className="text-sm text-[#F87171]">{error}</p> : null}
+          <button className="h-12 rounded-md bg-[#2DD4BF] font-semibold text-neutral-950">
             Login
           </button>
         </form>
 
-        <p className="text-sm text-white/70">
+        <p className="text-sm text-[#B8C7C2]">
           New here?{" "}
-          <Link className="text-teal-300" href="/register">
+          <Link className="text-[#2DD4BF]" href="/register">
             Create account
           </Link>
         </p>

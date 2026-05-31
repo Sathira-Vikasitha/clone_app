@@ -38,12 +38,12 @@ export function NotificationsLink() {
 
   return (
     <Link
-      className="relative rounded-md border border-white/15 px-4 py-2 text-sm text-white/80"
+      className="relative rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm text-[#DDEDE9]"
       href="/notifications"
     >
       Notifications
       {count > 0 ? (
-        <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-300 px-1 text-xs font-bold text-neutral-950">
+        <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2DD4BF] px-1 text-xs font-bold text-neutral-950">
           {count > 9 ? "9+" : count}
         </span>
       ) : null}

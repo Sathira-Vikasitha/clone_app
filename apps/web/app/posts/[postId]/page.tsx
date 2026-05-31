@@ -174,13 +174,13 @@ export default function PostDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AppNav user={me} />
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
-            className="rounded-md border border-teal-300/40 px-4 py-2 text-sm text-teal-200"
+            className="rounded-md border border-[#2DD4BF]/40 px-4 py-2 text-sm text-[#7DEADF]"
             href={getFallbackHref()}
           >
             {from === "profile"
@@ -192,24 +192,24 @@ export default function PostDetailPage() {
         </div>
 
         {error ? (
-          <p className="rounded-md border border-red-300/30 bg-red-300/10 p-4 text-red-200">
+          <p className="rounded-md border border-[#F87171]/30 bg-[#F87171]/10 p-4 text-[#FDA4A4]">
             {error}
           </p>
         ) : null}
 
         {post ? (
-          <article className="rounded-md border border-white/10 bg-white/10 p-5">
+          <article className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5">
             <div className="flex items-center justify-between">
               <Link href={`/profile/${post.author.username}`}>
                 <p className="font-semibold">{post.author.name}</p>
-                <p className="text-sm text-white/55">@{post.author.username}</p>
+                <p className="text-sm text-[#94A3B8]/90">@{post.author.username}</p>
               </Link>
-              <p className="text-xs text-white/45">
+              <p className="text-xs text-[#94A3B8]/75">
                 {new Date(post.createdAt).toLocaleDateString()}
               </p>
             </div>
 
-            <p className="mt-4 whitespace-pre-wrap text-white/90">{post.caption}</p>
+            <p className="mt-4 whitespace-pre-wrap text-[#F8FAFC]/90">{post.caption}</p>
 
             {post.imageUrl ? (
               <Image
@@ -226,8 +226,8 @@ export default function PostDetailPage() {
                 onClick={toggleLike}
                 className={`rounded-md px-4 py-2 font-medium ${
                   post.likedByMe
-                    ? "bg-teal-300 text-neutral-950"
-                    : "border border-white/15 text-white/75"
+                    ? "bg-[#2DD4BF] text-neutral-950"
+                    : "border border-[#2DD4BF]/25 text-[#DDEDE9]/85"
                 }`}
               >
                 {post.likedByMe ? "Liked" : "Like"} ({post._count.likes})
@@ -238,18 +238,18 @@ export default function PostDetailPage() {
                   className={`rounded-md px-4 py-2 font-medium ${
                     post.savedByMe
                       ? "bg-white text-neutral-950"
-                      : "border border-white/15 text-white/75"
+                      : "border border-[#2DD4BF]/25 text-[#DDEDE9]/85"
                   }`}
                 >
                   {post.savedByMe ? "Saved" : "Save"}
                 </button>
               ) : null}
-              <span className="text-white/55">{post._count.comments} comments</span>
+              <span className="text-[#94A3B8]/90">{post._count.comments} comments</span>
             </div>
 
             <form onSubmit={addComment} className="mt-5 flex gap-2">
               <input
-                className="h-11 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-900 px-3 outline-none focus:border-teal-300"
+                className="h-11 min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-3 outline-none focus:border-[#2DD4BF]"
                 placeholder="Write a comment..."
                 value={commentText}
                 onChange={(event) => setCommentText(event.target.value)}
@@ -261,20 +261,20 @@ export default function PostDetailPage() {
 
             <section className="mt-6 flex flex-col gap-4">
               {post.comments.slice(0, visibleCommentCount).map((comment) => (
-                <div key={comment.id} className="rounded-md bg-neutral-900 p-4">
+                <div key={comment.id} className="rounded-md bg-[#10201D] p-4">
                   <p className="text-sm font-semibold">
                     @{comment.author.username}
                   </p>
-                  <p className="mt-1 text-white/80">{comment.body}</p>
+                  <p className="mt-1 text-[#DDEDE9]">{comment.body}</p>
 
                   {comment.replies.length > 0 ? (
-                    <div className="mt-4 ml-5 flex flex-col gap-3 border-l border-white/10 pl-4">
+                    <div className="mt-4 ml-5 flex flex-col gap-3 border-l border-[#2DD4BF]/15 pl-4">
                       {comment.replies.map((reply) => (
                         <div key={reply.id}>
-                          <p className="text-sm font-semibold text-white/80">
+                          <p className="text-sm font-semibold text-[#DDEDE9]">
                             @{reply.author.username}
                           </p>
-                          <p className="text-sm text-white/70">{reply.body}</p>
+                          <p className="text-sm text-[#B8C7C2]">{reply.body}</p>
                         </div>
                       ))}
                     </div>
@@ -282,7 +282,7 @@ export default function PostDetailPage() {
 
                   <div className="mt-4 flex gap-2">
                     <input
-                      className="h-10 min-w-0 flex-1 rounded-md border border-white/15 bg-neutral-950 px-3 text-sm outline-none focus:border-teal-300"
+                      className="h-10 min-w-0 flex-1 rounded-md border border-[#2DD4BF]/25 bg-[#071311] px-3 text-sm outline-none focus:border-[#2DD4BF]"
                       placeholder="Reply..."
                       value={replyText[comment.id] || ""}
                       onChange={(event) =>
@@ -294,7 +294,7 @@ export default function PostDetailPage() {
                     />
                     <button
                       onClick={() => addReply(comment.id)}
-                      className="h-10 rounded-md border border-white/15 px-3 text-sm text-white/80"
+                      className="h-10 rounded-md border border-[#2DD4BF]/25 px-3 text-sm text-[#DDEDE9]"
                     >
                       Reply
                     </button>
@@ -306,7 +306,7 @@ export default function PostDetailPage() {
                   onClick={() =>
                     setVisibleCommentCount((currentCount) => currentCount + 4)
                   }
-                  className="rounded-md border border-white/15 px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/10"
+                  className="rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm font-medium text-[#DDEDE9] hover:bg-[#162B27]/80"
                 >
                   See more comments
                 </button>
@@ -314,7 +314,7 @@ export default function PostDetailPage() {
             </section>
           </article>
         ) : (
-          <p className="text-white/60">Loading post...</p>
+          <p className="text-[#94A3B8]">Loading post...</p>
         )}
       </section>
     </main>

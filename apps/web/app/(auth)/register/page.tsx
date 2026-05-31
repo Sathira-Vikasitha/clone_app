@@ -36,10 +36,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-10 text-white">
       <section className="mx-auto flex w-full max-w-md flex-col gap-8">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Social app
           </p>
           <h1 className="mt-3 text-4xl font-semibold">Create your account</h1>
@@ -47,13 +47,13 @@ export default function RegisterPage() {
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Name"
             value={form.name}
             onChange={(event) => setForm({ ...form, name: event.target.value })}
           />
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Username"
             value={form.username}
             onChange={(event) =>
@@ -61,7 +61,7 @@ export default function RegisterPage() {
             }
           />
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Email"
             type="email"
             value={form.email}
@@ -70,7 +70,7 @@ export default function RegisterPage() {
             }
           />
           <input
-            className="h-12 rounded-md border border-white/15 bg-white/10 px-4 outline-none focus:border-teal-300"
+            className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#162B27]/80 px-4 outline-none focus:border-[#2DD4BF]"
             placeholder="Password"
             type="password"
             value={form.password}
@@ -78,15 +78,15 @@ export default function RegisterPage() {
               setForm({ ...form, password: event.target.value })
             }
           />
-          {error ? <p className="text-sm text-red-300">{error}</p> : null}
-          <button className="h-12 rounded-md bg-teal-300 font-semibold text-neutral-950">
+          {error ? <p className="text-sm text-[#F87171]">{error}</p> : null}
+          <button className="h-12 rounded-md bg-[#2DD4BF] font-semibold text-neutral-950">
             Register
           </button>
         </form>
 
-        <p className="text-sm text-white/70">
+        <p className="text-sm text-[#B8C7C2]">
           Already have an account?{" "}
-          <Link className="text-teal-300" href="/login">
+          <Link className="text-[#2DD4BF]" href="/login">
             Login
           </Link>
         </p>

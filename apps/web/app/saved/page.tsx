@@ -85,49 +85,49 @@ export default function SavedPostsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-white/10 bg-white/10 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Private
           </p>
           <h1 className="mt-2 text-4xl font-semibold">Saved posts</h1>
-          <p className="mt-3 text-white/60">
+          <p className="mt-3 text-[#94A3B8]">
             Only you can see the posts you save.
           </p>
         </header>
 
-        {message ? <p className="text-sm text-white/60">{message}</p> : null}
+        {message ? <p className="text-sm text-[#94A3B8]">{message}</p> : null}
 
         <section className="flex flex-col gap-5">
           {posts.map((post) => (
             <article
               key={post.id}
-              className="rounded-md border border-white/10 bg-white/10 p-5"
+              className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5"
             >
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <Link
-                    className="font-semibold hover:text-teal-200"
+                    className="font-semibold hover:text-[#7DEADF]"
                     href={`/profile/${post.author.username}`}
                   >
                     {post.author.name}
                   </Link>
                   <Link
-                    className="block text-sm text-white/55 hover:text-teal-200"
+                    className="block text-sm text-[#94A3B8]/90 hover:text-[#7DEADF]"
                     href={`/profile/${post.author.username}`}
                   >
                     @{post.author.username}
                   </Link>
                 </div>
-                <p className="text-xs text-white/45">
+                <p className="text-xs text-[#94A3B8]/75">
                   {new Date(post.createdAt).toLocaleDateString()}
                 </p>
               </div>
 
-              <p className="mt-4 whitespace-pre-wrap text-white/90">
+              <p className="mt-4 whitespace-pre-wrap text-[#F8FAFC]/90">
                 {post.caption}
               </p>
 
@@ -143,7 +143,7 @@ export default function SavedPostsPage() {
 
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
                 <Link
-                  className="rounded-md border border-white/15 px-4 py-2 font-medium text-white/75"
+                  className="rounded-md border border-[#2DD4BF]/25 px-4 py-2 font-medium text-[#DDEDE9]/85"
                   href={`/posts/${post.id}?from=saved`}
                 >
                   View post
@@ -154,21 +154,21 @@ export default function SavedPostsPage() {
                 >
                   Remove saved
                 </button>
-                <span className="text-white/55">
+                <span className="text-[#94A3B8]/90">
                   {post._count.likes} likes
                 </span>
-                <span className="text-white/55">
+                <span className="text-[#94A3B8]/90">
                   {post._count.comments} comments
                 </span>
               </div>
 
               <div className="mt-4 flex flex-col gap-3">
                 {post.comments.slice(-2).map((comment) => (
-                  <div key={comment.id} className="rounded-md bg-neutral-900 p-3">
+                  <div key={comment.id} className="rounded-md bg-[#10201D] p-3">
                     <p className="text-sm font-semibold">
                       @{comment.author.username}
                     </p>
-                    <p className="mt-1 text-sm text-white/75">{comment.body}</p>
+                    <p className="mt-1 text-sm text-[#DDEDE9]/85">{comment.body}</p>
                   </div>
                 ))}
               </div>

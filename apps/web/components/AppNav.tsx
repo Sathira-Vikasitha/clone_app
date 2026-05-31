@@ -13,7 +13,7 @@ type AppNavProps = {
 };
 
 const navLinkClass =
-  "rounded-md border border-white/15 px-3 py-2 text-sm text-white/80 hover:border-teal-300/50 hover:text-teal-200";
+  "rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9] hover:border-[#2DD4BF]/50 hover:text-[#7DEADF]";
 
 export function AppNav({ user, showLogout = true }: AppNavProps) {
   const router = useRouter();
@@ -24,7 +24,7 @@ export function AppNav({ user, showLogout = true }: AppNavProps) {
   }
 
   return (
-    <nav className="flex flex-col gap-4 rounded-md border border-white/10 bg-white/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+    <nav className="flex flex-col gap-4 rounded-md border border-[#2DD4BF]/15 bg-[#10201D]/70 p-4 sm:flex-row sm:items-center sm:justify-between">
       <Link className="text-xl font-semibold tracking-tight" href="/">
         InstaClone
       </Link>
@@ -57,7 +57,7 @@ export function AppNav({ user, showLogout = true }: AppNavProps) {
         ) : null}
         {user ? (
           <Link
-            className="rounded-md border border-teal-300/50 px-3 py-2 text-sm text-teal-200 hover:bg-teal-300/10"
+            className="rounded-md border border-[#2DD4BF]/50 px-3 py-2 text-sm text-[#7DEADF] hover:bg-[#2DD4BF]/10"
             href={`/profile/${user.username}`}
           >
             Profile
@@ -67,7 +67,7 @@ export function AppNav({ user, showLogout = true }: AppNavProps) {
           <button
             onClick={logout}
             suppressHydrationWarning
-            className="rounded-md border border-white/15 px-3 py-2 text-sm text-white/80 hover:border-red-300/50 hover:text-red-200"
+            className="rounded-md border border-[#2DD4BF]/25 px-3 py-2 text-sm text-[#DDEDE9] hover:border-[#F87171]/50 hover:text-[#FDA4A4]"
           >
             Logout
           </button>

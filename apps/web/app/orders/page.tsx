@@ -107,58 +107,58 @@ export default function OrdersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-white/10 bg-white/10 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-teal-300">
+        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
             Seller dashboard
           </p>
           <h1 className="mt-2 text-4xl font-semibold">Orders summary</h1>
-          <p className="mt-3 text-white/60">
+          <p className="mt-3 text-[#94A3B8]">
             Track buyer requests, paid orders, approval status, and estimated earnings.
           </p>
         </header>
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Total</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Total</p>
             <p className="mt-2 text-3xl font-semibold">{summary.total}</p>
           </div>
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Pending</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Pending</p>
             <p className="mt-2 text-3xl font-semibold">{summary.pending}</p>
           </div>
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Card paid</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Card paid</p>
             <p className="mt-2 text-3xl font-semibold">{summary.paid}</p>
           </div>
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Approved</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Approved</p>
             <p className="mt-2 text-3xl font-semibold">{summary.approved}</p>
           </div>
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Rejected</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Rejected</p>
             <p className="mt-2 text-3xl font-semibold">{summary.rejected}</p>
           </div>
-          <div className="rounded-md border border-teal-300/30 bg-teal-300/10 p-4">
-            <p className="text-sm text-teal-100">Earnings</p>
+          <div className="rounded-md border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 p-4">
+            <p className="text-sm text-[#BDF7EF]">Earnings</p>
             <p className="mt-2 text-2xl font-semibold">
               {summary.currency} {summary.earnings}
             </p>
           </div>
-          <div className="rounded-md border border-white/10 bg-white/10 p-4">
-            <p className="text-sm text-white/55">Downloads</p>
+          <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+            <p className="text-sm text-[#94A3B8]/90">Downloads</p>
             <p className="mt-2 text-3xl font-semibold">{summary.downloads}</p>
           </div>
         </section>
 
-        {message ? <p className="text-sm text-white/60">{message}</p> : null}
+        {message ? <p className="text-sm text-[#94A3B8]">{message}</p> : null}
 
         <section className="flex flex-col gap-4">
           {orders.map((order) => (
-            <article key={order.id} className="rounded-md border border-white/10 bg-white/10 p-4">
+            <article key={order.id} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
               <div className="grid gap-4 md:grid-cols-[180px_1fr]">
                 <Image
                   className="aspect-video w-full rounded-md object-cover"
@@ -171,7 +171,7 @@ export default function OrdersPage() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <h2 className="text-xl font-semibold">{order.item.title}</h2>
-                      <p className="mt-1 text-sm text-white/55">
+                      <p className="mt-1 text-sm text-[#94A3B8]/90">
                         Buyer: @{order.buyer.username}
                       </p>
                     </div>
@@ -179,13 +179,13 @@ export default function OrdersPage() {
                       {order.item.currency} {order.item.priceAmount}
                     </p>
                   </div>
-                  <div className="mt-4 grid gap-2 text-sm text-white/60 sm:grid-cols-2">
+                  <div className="mt-4 grid gap-2 text-sm text-[#94A3B8] sm:grid-cols-2">
                     <p>Payment method: {order.paymentMethod}</p>
                     <p>Status: {getStatusLabel(order.status)}</p>
                     <p>Downloads: {order.item._count.downloads}</p>
                     <p>Created: {new Date(order.createdAt).toLocaleDateString()}</p>
                     {order.receiptUrl ? (
-                      <a className="text-teal-200" href={order.receiptUrl} target="_blank">
+                      <a className="text-[#7DEADF]" href={order.receiptUrl} target="_blank">
                         View receipt
                       </a>
                     ) : (
