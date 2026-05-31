@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InstaClone",
-  description: "A social app with posts, messaging, store, and admin tools.",
+  title: "Pixora",
+  description: "A social photo marketplace with posts, messaging, store, and admin tools.",
 };
 
 export default function RootLayout({

@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { API_URL, apiFetch } from "@/lib/api";
 import { getAccessToken } from "@/lib/auth";
 
-export function NotificationsLink() {
+type NotificationsLinkProps = {
+  className?: string;
+};
+
+export function NotificationsLink({ className }: NotificationsLinkProps) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -38,7 +42,7 @@ export function NotificationsLink() {
 
   return (
     <Link
-      className="relative rounded-md border border-[#2DD4BF]/25 px-4 py-2 text-sm text-[#DDEDE9]"
+      className={`relative ${className || ""}`}
       href="/notifications"
     >
       Notifications

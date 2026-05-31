@@ -101,12 +101,12 @@ export default function AdminPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
+        <header className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-7 shadow-2xl shadow-black/20">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#F4C95D]">
             Moderation
           </p>
-          <h1 className="mt-2 text-4xl font-semibold">Admin dashboard</h1>
-          <p className="mt-3 text-[#94A3B8]">
+          <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">Admin dashboard</h1>
+          <p className="mt-3 max-w-2xl text-[#94A3B8]">
             Review app health and remove unsafe store items when needed.
           </p>
         </header>
@@ -121,7 +121,7 @@ export default function AdminPage() {
           <>
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
               {Object.entries(dashboard.stats).map(([label, value]) => (
-                <div key={label} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+                <div key={label} className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5 shadow-xl shadow-black/10">
                   <p className="text-sm capitalize text-[#94A3B8]/90">
                     {label.replace(/([A-Z])/g, " $1")}
                   </p>
@@ -131,12 +131,12 @@ export default function AdminPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold">Latest store items</h2>
+              <h2 className="text-2xl font-black">Latest store items</h2>
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 {dashboard.latestStoreItems.map((item) => (
                   <article
                     key={item.id}
-                    className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4"
+                    className="overflow-hidden rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 shadow-xl shadow-black/10 transition hover:border-[#2DD4BF]/30"
                   >
                     <Image
                       className="aspect-video w-full rounded-md object-cover"

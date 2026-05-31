@@ -417,12 +417,14 @@ export default function StorePage() {
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <AppNav user={me} />
 
-        <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
+        <header className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-7 shadow-2xl shadow-black/20">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#F4C95D]">
             Marketplace
           </p>
-          <h1 className="mt-2 text-4xl font-semibold">Store</h1>
-          <p className="mt-3 text-[#94A3B8]">
+          <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
+            Pixora Store
+          </h1>
+          <p className="mt-3 max-w-2xl text-[#94A3B8]">
             Sell downloadable images. Buyers can pay by receipt approval or demo card payment.
           </p>
         </header>
@@ -433,8 +435,11 @@ export default function StorePage() {
           </p>
         ) : null}
 
-        <form onSubmit={createItem} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5">
-          <h2 className="text-2xl font-semibold">Add image to store</h2>
+        <form onSubmit={createItem} className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6 shadow-xl shadow-black/10">
+          <h2 className="text-2xl font-black">Add image to store</h2>
+          <p className="mt-1 text-sm text-[#94A3B8]">
+            Upload a polished image, set a price, and let buyers request access.
+          </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <input
               className="h-12 rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 outline-none focus:border-[#2DD4BF]"
@@ -507,7 +512,7 @@ export default function StorePage() {
         <section>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold">Explore store</h2>
+              <h2 className="text-2xl font-black">Explore store</h2>
               <p className="mt-1 text-sm text-[#94A3B8]/90">
                 Search by title, description, or hashtags like #nature.
               </p>
@@ -543,7 +548,7 @@ export default function StorePage() {
               const isEditing = editingItemId === item.id;
 
               return (
-                <article key={item.id} className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+                <article key={item.id} className="overflow-hidden rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 shadow-xl shadow-black/10 transition hover:border-[#2DD4BF]/30">
                   <Image
                     className="aspect-video w-full rounded-md object-cover"
                     src={item.imageUrl}
@@ -711,8 +716,8 @@ export default function StorePage() {
           ) : null}
         </section>
 
-        <section className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5">
-          <h2 className="text-2xl font-semibold">Buyer requests for your store items</h2>
+        <section className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6 shadow-xl shadow-black/10">
+          <h2 className="text-2xl font-black">Buyer requests for your store items</h2>
           <div className="mt-4 flex flex-col gap-3">
             {sellerRequests.length === 0 ? (
               <p className="text-sm text-[#94A3B8]">No buyer requests yet.</p>

@@ -109,7 +109,7 @@ export default function ProfilePage() {
 
         {me?.username === profile?.username ? (
           <Link
-            className="w-fit rounded-md border border-[#2DD4BF]/50 px-4 py-2 text-sm text-[#7DEADF]"
+            className="w-fit rounded-full border border-[#2DD4BF]/50 bg-[#2DD4BF]/10 px-4 py-2 text-sm font-semibold text-[#7DEADF]"
             href="/profile/edit"
           >
             Edit profile
@@ -124,9 +124,9 @@ export default function ProfilePage() {
 
         {profile ? (
           <>
-            <header className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
+            <header className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-7 shadow-2xl shadow-black/20">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#2DD4BF] text-3xl font-bold text-neutral-950">
+                <div className="flex h-28 w-28 items-center justify-center rounded-3xl bg-[#2DD4BF] text-4xl font-black text-neutral-950 shadow-lg shadow-[#2DD4BF]/20">
                   {profile.avatarUrl ? (
                     <Image
                       className="h-full w-full rounded-full object-cover"
@@ -140,7 +140,7 @@ export default function ProfilePage() {
                   )}
                 </div>
                 <div>
-                  <h1 className="text-4xl font-semibold">{profile.name}</h1>
+                  <h1 className="text-4xl font-black tracking-tight sm:text-5xl">{profile.name}</h1>
                   <p className="mt-2 text-[#94A3B8]">@{profile.username}</p>
                   <p className="mt-4 text-[#DDEDE9]">
                     {profile.bio || "No bio yet."}
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                   {me?.username !== profile.username ? (
                     <button
                       onClick={startChatWithProfile}
-                      className="mt-5 rounded-md bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-neutral-950"
+                    className="mt-5 rounded-full bg-[#2DD4BF] px-5 py-2 text-sm font-semibold text-neutral-950"
                     >
                       Message
                     </button>
@@ -161,10 +161,15 @@ export default function ProfilePage() {
             </header>
 
             <section className="grid gap-4 sm:grid-cols-2">
+              {profile.posts.length === 0 ? (
+                <div className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-8 text-center text-[#94A3B8] sm:col-span-2">
+                  No posts on this profile yet.
+                </div>
+              ) : null}
               {profile.posts.map((post) => (
                 <article
                   key={post.id}
-                  className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4"
+                  className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 shadow-xl shadow-black/10 transition hover:border-[#2DD4BF]/30"
                 >
                   {post.imageUrl ? (
                     <Image

@@ -198,8 +198,20 @@ export default function MessagesPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <AppNav user={me} />
 
+        <header className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-7 shadow-2xl shadow-black/20">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#F4C95D]">
+            Direct messages
+          </p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
+            Conversations
+          </h1>
+          <p className="mt-3 text-[#94A3B8]">
+            Keep chats separated by account and follow the conversation in real time.
+          </p>
+        </header>
+
         <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-          <aside className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4">
+          <aside className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-4 shadow-xl shadow-black/10">
             {me ? (
               <div className="mb-4 rounded-md border border-[#2DD4BF]/15 bg-[#10201D] p-3">
                 <p className="text-xs uppercase tracking-[0.18em] text-[#2DD4BF]">
@@ -273,7 +285,7 @@ export default function MessagesPage() {
             </div>
           </aside>
 
-          <section className="flex min-h-[620px] flex-col rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80">
+          <section className="flex min-h-[620px] flex-col overflow-hidden rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 shadow-xl shadow-black/10">
             <header className="border-b border-[#2DD4BF]/15 p-4">
               <div className="flex items-center gap-3">
                 {selectedRecipient ? (

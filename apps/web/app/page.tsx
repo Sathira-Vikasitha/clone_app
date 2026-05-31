@@ -326,30 +326,36 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#071311] px-6 py-8 text-white">
-      <section className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+      <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <AppNav user={user} showLogout />
 
-        <div className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#2DD4BF]">
-            Week 2
+        <div className="overflow-hidden rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-7 shadow-2xl shadow-black/20">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#F4C95D]">
+            Pixora Feed
           </p>
-          <h1 className="mt-3 text-4xl font-semibold">
-            {user ? `Hello, ${user.name}` : "Checking your login..."}
+          <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+            {user ? `Welcome back, ${user.name}` : "Checking your login..."}
           </h1>
           {user ? (
-            <div className="mt-6 grid gap-3 text-[#DDEDE9]/85">
-              <p>Username: @{user.username}</p>
-              <p>Email: {user.email}</p>
-              <p>User ID: {user.id}</p>
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#DDEDE9]/85">
+              <p className="rounded-full border border-[#2DD4BF]/20 bg-[#071311]/35 px-4 py-2">
+                @{user.username}
+              </p>
+              <p className="rounded-full border border-[#2DD4BF]/20 bg-[#071311]/35 px-4 py-2">
+                {user.email}
+              </p>
             </div>
           ) : null}
         </div>
 
         <form
           onSubmit={createPost}
-          className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6"
+          className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-6 shadow-xl shadow-black/10"
         >
-          <h2 className="text-2xl font-semibold">Create post</h2>
+          <h2 className="text-2xl font-black">Create post</h2>
+          <p className="mt-1 text-sm text-[#94A3B8]">
+            Share a thought, a photo, or a moment with your Pixora circle.
+          </p>
           <textarea
             className="mt-4 min-h-28 w-full resize-none rounded-md border border-[#2DD4BF]/25 bg-[#10201D] px-4 py-3 outline-none focus:border-[#2DD4BF]"
             placeholder="Write a caption..."
@@ -396,10 +402,21 @@ export default function HomePage() {
         </form>
 
         <section className="flex flex-col gap-5">
+          {posts.length === 0 ? (
+            <div className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-8 text-center shadow-xl shadow-black/10">
+              <p className="text-sm uppercase tracking-[0.2em] text-[#F4C95D]">
+                Empty feed
+              </p>
+              <h2 className="mt-2 text-2xl font-black">No posts yet</h2>
+              <p className="mt-2 text-[#94A3B8]">
+                Create the first post and start the feed.
+              </p>
+            </div>
+          ) : null}
           {posts.map((post) => (
             <article
               key={post.id}
-              className="rounded-md border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5"
+              className="rounded-3xl border border-[#2DD4BF]/15 bg-[#162B27]/80 p-5 shadow-xl shadow-black/10 transition hover:border-[#2DD4BF]/30"
             >
               <div className="flex items-center justify-between gap-4">
                 <div>
