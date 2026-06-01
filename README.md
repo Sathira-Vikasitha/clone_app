@@ -4,6 +4,18 @@ Pixora is a social photo marketplace app. Users can create posts, like, comment,
 
 The store currently supports demo card payments and manual receipt approval. It is ready as a prototype/demo marketplace, but it does not yet include a real payment gateway.
 
+## Tech Stack
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-Backend-000000?style=for-the-badge&logo=express)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Cloud_DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=black)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-Image_Uploads-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-Styling-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)
+
 ## Portfolio Project
 
 This project is intended as a portfolio/demo project to show full-stack development skills. Payment features are simulated for demonstration purposes. A real payment gateway and production security review would be required before real users or real transactions.
