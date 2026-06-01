@@ -10,6 +10,62 @@ This project is intended as a portfolio/demo project to show full-stack developm
 
 See [PORTFOLIO.md](./PORTFOLIO.md) for the project summary, screenshot checklist, and demo video script.
 
+## Screenshots
+
+### Login
+
+![Login](portfolio-assets/screenshots/01-login.png)
+
+### Register
+
+![Register](portfolio-assets/screenshots/02-register.png)
+
+### Feed
+
+![Feed](portfolio-assets/screenshots/03.1-feed.png)
+
+![Feed post detail](portfolio-assets/screenshots/03.2-feed.png)
+
+![Feed comments](portfolio-assets/screenshots/03.3-feed.png)
+
+### Create Post
+
+![Create post](portfolio-assets/screenshots/04-create-post.png)
+
+### Profile
+
+![Profile](portfolio-assets/screenshots/05-profile.png)
+
+### Search
+
+![Search](portfolio-assets/screenshots/06-search.png)
+
+### Messages
+
+![Messages](portfolio-assets/screenshots/07-messages.png)
+
+### Notifications
+
+![Notifications](portfolio-assets/screenshots/08-notifications.png)
+
+### Store
+
+![Store](portfolio-assets/screenshots/09.1-store.png)
+
+![Store item](portfolio-assets/screenshots/09.2-store.png)
+
+### Purchases
+
+![Purchases](portfolio-assets/screenshots/10-purchases.png)
+
+### Orders
+
+![Orders](portfolio-assets/screenshots/11-orders.png)
+
+### Admin
+
+![Admin](portfolio-assets/screenshots/12-admin.png)
+
 ## Features
 
 - User register and login with JWT authentication
