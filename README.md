@@ -241,6 +241,16 @@ Deployment reminders:
 - Never commit `.env` files.
 - Keep Supabase and Cloudinary secrets only in hosting environment variables.
 
+## Future Improvements
+
+- Connect a real payment gateway such as Stripe or PayHere for live card payments.
+- Add email verification and password reset.
+- Add production-ready image moderation for uploaded content.
+- Improve real-time messaging with WebSockets.
+- Add advanced admin analytics and reporting.
+- Deploy the frontend, backend, and database for a public live demo.
+- Add automated tests for backend APIs and frontend user flows.
+
 ## Useful Commands
 
 Frontend lint:
