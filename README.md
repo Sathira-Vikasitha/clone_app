@@ -4,6 +4,12 @@ Pixora is a social photo marketplace app. Users can create posts, like, comment,
 
 The store currently supports demo card payments and manual receipt approval. It is ready as a prototype/demo marketplace, but it does not yet include a real payment gateway.
 
+## Portfolio Project
+
+This project is intended as a portfolio/demo project to show full-stack development skills. Payment features are simulated for demonstration purposes. A real payment gateway and production security review would be required before real users or real transactions.
+
+See [PORTFOLIO.md](./PORTFOLIO.md) for the project summary, screenshot checklist, and demo video script.
+
 ## Features
 
 - User register and login with JWT authentication
